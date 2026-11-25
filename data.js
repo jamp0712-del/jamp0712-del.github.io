@@ -33,11 +33,11 @@ window.PROJECTS = [
     category: "Ceiling Light",
     year: "2026",
     role: "Product Design · 3D Modeling · Rendering",
-    client: "Raemian Residence",
-    summary: "A ceiling light for Raemian residences. A layered clear-acrylic frame catches the light at its edge, so the fixture glows softly even where the diffuser ends.",
+    client: "Raemian — design proposal",
+    summary: "A flush-mount main light for Raemian residences. Stacked tiers of clear PC wrap an edge-lit panel, so the outline glows like layered glass — a premium object on the ceiling, only 45 mm thin.",
     body: [
-      "FLOS started from a single question: how can a flat ceiling light feel lighter than the ceiling it sits on? The answer was a stepped, transparent acrylic rim that wraps a warm diffuser panel and turns its edge into a thin line of light.",
-      "The same language was developed into double, square and round versions, and tested in bedroom and living-room scenes to check how each one holds the room."
+      "FLOS started from one question: how can a flat ceiling light feel lighter than the ceiling it sits on? The answer was a layered, transparent rim that wraps a warm diffuser and turns its edge into a soft line of light.",
+      "The same rim and trim were developed into three sizes — living room, master bedroom and bedroom — and tested in room scenes to check how each one holds its space."
     ],
     cover: "flos-24.webp",
     gallery: [
@@ -60,7 +60,7 @@ window.PROJECTS = [
     year: "2026",
     role: "Product Design · Rendering",
     client: "In-house",
-    summary: "A brushed aluminum body held between two curved sheets of clear acrylic — light washes up and down the wall through the bent edges.",
+    summary: "A brushed aluminum band between two curled blades of clear acrylic — light runs through the blades, glows at their edges and washes the wall above and below.",
     body: [
       "The acrylic is bent rather than framed, so each edge becomes a light guide. The metal body stays simple to let the glow on the wall do the work."
     ],
@@ -79,7 +79,7 @@ window.PROJECTS = [
     year: "2026",
     role: "Design · Engineering · Mockup · Rendering",
     client: "Product Development Team",
-    summary: "One aluminum profile, two fixtures. A wall light and a pendant built from the same extruded body, hook-on painted wings, layered end caps and a translucent acrylic diffuser.",
+    summary: "One extrusion, a whole family of lights. A wall light and a pendant built from the same aluminum body, hook-on painted wings, layered end caps and a translucent acrylic diffuser — designed so one die can cover many rooms.",
     body: [
       "The family shares one 27.6 × 70.4 mm extrusion. Only the cut length changes, so the wall light and the pendant sit together in one space and in one production line.",
       "All ten parts were engineered in Rhino, 3D-printed and test-fitted in FDM and TPU, then issued to the mockup vendor with a part-by-part spec sheet — size, quantity and finish for every piece."
@@ -100,7 +100,7 @@ window.PROJECTS = [
     year: "2026",
     role: "Concept · 3D Modeling · Rendering",
     client: "Concept",
-    summary: "A single thin line of light for long tables — two slim legs, one bar, nothing else.",
+    summary: "A single thin line of light for long tables — the bar bends into its legs in one stroke, and stands on discs or clamps to a desk.",
     body: [
       "Designed to disappear into the table: the light source, arm and legs read as one continuous line, from a home desk to a long communal bar."
     ],

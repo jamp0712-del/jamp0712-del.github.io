@@ -1,6 +1,6 @@
 // 제품 상세: 브리프, 디자인 포인트, 도면, 분해도, CMF, 프로세스, 스펙, 부품
-// ※ 멀티라이팅은 실제 시방서(2026.09.02)의 부품·치수·마감을 그대로 썼어요.
-//   나머지 프로젝트의 수치는 포트폴리오용으로 설정한 값이라, 실제 값이 있으면 여기서 바꿔주세요.
+// 실제 자료 기준: FLOS(래미안 제안서 사이즈·와트·재질), 멀티라이팅(시방서 부품·치수·마감, 팝업 스펙, 중간보고 컨셉)
+// 그 외 수치(색온도 옵션, 무게 등)와 Clear Wall Sconce · Linear Table Light · Cove 스펙은 설정값입니다.
 // parts 번호 = 도면 콜아웃 번호(①②③…). parts: [이름, 재질·마감, 사이즈(선택), 수량(선택)]
 // cmf: [이름, 설명, 스와치 CSS background]
 const SW = {
@@ -14,61 +14,61 @@ const SW = {
 
 window.DETAILS = {
   flos: {
-    brief: "Raemian needed a main ceiling light for new residences that feels premium without looking heavy. Most flush mounts read as a flat white box stuck to the ceiling.",
-    approach: "Make the edge the design. A three-step clear acrylic rim wraps an edge-lit panel and catches its stray light, so the outline glows and the body seems to float off the ceiling.",
+    brief: "Part of a lighting-differentiation proposal for Raemian residences. Main ceiling lights are the most visible fixture in a home, yet most are a flat white panel stuck to the ceiling — nothing that says premium.",
+    approach: "Layered glass. Stacked tiers of clear, ribbed PC wrap an edge-lit panel; each tier catches a little stray light, so the outline glows like stacked glass while the whole fixture stays 45 mm thin. The result reads as an object on the ceiling, not a box.",
     points: [
-      ["Stepped acrylic rim", "Three ribbed tiers of clear PMMA pick up light from the panel edge and turn the outline into a soft line of light."],
-      ["82 mm slim body", "Edge-lit LEDs and a 4 mm light guide keep the fixture thin while the whole face glows evenly, with no hot spots."],
-      ["One family, three shapes", "Double, square and round versions share the rim section and trim, so a whole home can be lit in one language."]
+      ["Layered-glass rim", "Three tiers of clear PC, each ribbed and stepped back from the one above. Light leaking from the LED edge is caught tier by tier and turned into a soft glowing outline."],
+      ["45 mm, every size", "Edge-lit LEDs feed a laser-dotted light guide, so the LEDs sit at the edge instead of behind the face. All three sizes keep the same 45 mm profile."],
+      ["One family, three rooms", "650 × 450 for the living room, 650 × 650 for the master bedroom, 600 × 600 for bedrooms — the same rim section and trim, so a whole home reads as one family."]
     ],
-    dwg: "FL-01", scale: "1:5 / 1:1",
+    dwg: "FL-01", scale: "1:8 / 4:1",
     figs: [
-      ["plan", "Plan", 7],
-      ["elev", "Elevation", 5],
-      ["detail", "Section A — rim detail, 1:1", 12]
+      ["plan", "Plan — living room, 650 × 450", 5],
+      ["section", "Section A–A", 7],
+      ["detail", "Detail B — layered rim, 4:1", 12],
+      ["family", "Family — plan sizes to scale", 12]
     ],
     asm: "exploded",
     cmf: [
-      ["Clear PMMA", "Ribbed rim, polished", SW.clear],
-      ["Opal PS", "Matte diffuser, 1.5t", SW.opal],
-      ["Champagne", "Anodized aluminum trim", "linear-gradient(135deg,#d9c7a3,#b89c6c 55%,#d6c39d)"],
-      ["Warm white", "Powder coat, RAL 9010", "#f1efe8"]
+      ["Clear PC", "Layered rim, ribbed, polished", SW.clear],
+      ["Opal diffuser", "Even, glare-free face", SW.opal],
+      ["Champagne", "Aluminum trim line", "linear-gradient(135deg,#d9c7a3,#b89c6c 55%,#d6c39d)"],
+      ["Warm white", "Steel base, powder coat", "#f1efe8"]
     ],
     process: [
-      ["Direction", "Mood and form studies for edge-lit, floating ceiling lights.", "Midjourney · Sketch"],
-      ["Modeling", "Surface model with a 3-tier rim section, built for three sizes.", "Rhino"],
-      ["Engineering", "LED / light-guide stack, part split and ceiling bracket.", "Rhino"],
-      ["Visualization", "Bedroom and living-room scenes for the client review.", "KeyShot · Photoshop"]
+      ["Research", "Raemian's current main lights and premium references — where a flush mount can feel luxurious.", "Midjourney · ChatGPT"],
+      ["Concept", "‘Layered glass’: stacked clear tiers that glow at the edge.", "Sketch · Midjourney"],
+      ["Modeling", "Rim section built once and swept around three plan sizes.", "Rhino"],
+      ["Engineering", "Edge-lit LED / light-guide stack inside a 45 mm height, steel base and bracket.", "Rhino"],
+      ["Proposal", "Room scenes and a size line-up for the Raemian design proposal.", "KeyShot · Photoshop"]
     ],
     specs: [
-      ["Dimensions", "620 × 420 × 82 mm (single) · 2-lamp set"],
-      ["Variants", "Square 520 × 520 mm · Round Ø 520 mm"],
-      ["Light source", "LED module, 60 W, SMD 2835"],
-      ["Output", "6,000 lm"],
-      ["Color temperature", "3000 K / 4000 K / 5700 K, selectable"],
-      ["CRI", "Ra 90+"],
-      ["Control", "Wall switch 3-step · app dimming"],
-      ["Mounting", "Surface, ceiling bracket"],
-      ["Weight", "3.2 kg"]
+      ["Living room", "L 650 × W 450 × H 45 mm · LED 60 W"],
+      ["Master bedroom", "L 650 × W 650 × H 45 mm · LED 40 W"],
+      ["Bedroom", "L 600 × W 600 × H 45 mm · LED 40 W"],
+      ["Materials", "PC · aluminum · steel"],
+      ["Mounting", "Surface (flush) ceiling mount"],
+      ["Light", "Edge-lit LED, light guide + opal diffuser"],
+      ["Color temperature", "3000 / 4000 / 5700 K selectable"]
     ],
     parts: [
-      ["Steel base plate", "SPCC 0.8t, white powder coat"],
+      ["Base plate", "Steel, white powder coat"],
       ["Mounting bracket", "Galvanized steel"],
-      ["LED module", "60 W, edge-lit, SMD 2835"],
-      ["Light guide plate", "PMMA 4t, laser-dotted"],
-      ["Opal diffuser", "PS 1.5t"],
-      ["Stepped acrylic rim", "Clear PMMA, 3-tier ribbed, injection"],
-      ["Trim ring", "Aluminum, champagne anodized"]
+      ["LED module", "Edge-lit, along the panel edge"],
+      ["Light guide plate", "4t, laser-dotted"],
+      ["Opal diffuser", "PC 1.5t"],
+      ["Layered rim", "Clear PC, 3 tiers, ribbed"],
+      ["Trim line", "Aluminum, champagne"]
     ]
   },
 
   "clear-sconce": {
     brief: "A wall light for corridors and bedside walls that should read as a small sculpture when off, and as a soft wash on the wall when on.",
-    approach: "Let the material carry the light. Two heat-bent acrylic blades guide LED light through their thickness and release it at the curved tips.",
+    approach: "Let the material carry the light. A brushed aluminum band holds two LED strips; clear acrylic blades above and below guide the light along their thickness, glow at their curled edges and spill onto the wall.",
     points: [
-      ["Bent, not framed", "Each 5 mm blade is heat-bent from a single sheet — no frames or screws in view, only a clean edge of light."],
-      ["Up and down", "Two 4 W strips light the wall above and below, so one fixture can frame a doorway or a bed."],
-      ["Quiet body", "A finely grooved, brushed aluminum body holds the blades and hides the driver."]
+      ["Bent, not framed", "Each 5 mm blade is heat-bent from a single sheet. No frame, no screws in view — only a clean, glowing edge."],
+      ["Up and down", "Two strips light the wall above and below, so one fixture can frame a doorway or a bed."],
+      ["Quiet metal band", "A brushed aluminum band with a soft convex face hides the driver and holds both blades."]
     ],
     dwg: "CS-01", scale: "1:2",
     figs: [
@@ -76,42 +76,40 @@ window.DETAILS = {
       ["side", "Side section", 6]
     ],
     cmf: [
-      ["Clear PMMA", "5t, heat-bent, flame-polished edge", SW.clear],
-      ["Aluminum", "Brushed, clear anodized", SW.alu],
+      ["Clear acrylic", "5t, heat-bent, polished edge", SW.clear],
+      ["Aluminum", "Brushed band, clear anodized", SW.alu],
       ["Wall plate", "Steel, matte white", "#f1f0ec"]
     ],
     process: [
-      ["Direction", "Light-guide studies — how far light travels in a bent sheet.", "Sketch · Midjourney"],
-      ["Modeling", "Bend radius and blade length tuned in 3D.", "Rhino"],
+      ["Concept", "How far light travels inside a bent sheet, and how it leaves the edge.", "Sketch · Midjourney"],
+      ["Modeling", "Bend radius, blade length and band curvature tuned together.", "Rhino"],
       ["Visualization", "Caustics and wall wash on a dark plaster wall.", "KeyShot"]
     ],
     specs: [
-      ["Dimensions", "120 × 260 × 90 mm"],
+      ["Dimensions", "W 180 × H 190 × D 60 mm"],
       ["Light source", "LED 2 × 4 W, up / down"],
-      ["Output", "640 lm"],
       ["Color temperature", "2700 K"],
-      ["CRI", "Ra 90+"],
+      ["Materials", "Brushed aluminum · clear acrylic 5t"],
       ["Mounting", "Wall plate over junction box"],
-      ["Protection", "IP20, indoor"],
-      ["Weight", "0.9 kg"]
+      ["Protection", "IP20, indoor"]
     ],
     parts: [
       ["Wall plate", "Steel, white"],
-      ["Body", "Aluminum extrusion, brushed"],
+      ["Band body", "Aluminum, brushed"],
       ["LED strip", "4 W, 2700 K", "", 2],
-      ["Upper blade", "Clear PMMA 5t, heat-bent"],
-      ["Lower blade", "Clear PMMA 5t, heat-bent"],
+      ["Upper blade", "Clear acrylic 5t, heat-bent"],
+      ["Lower blade", "Clear acrylic 5t, heat-bent"],
       ["End caps", "Aluminum, brushed", "", 2]
     ]
   },
 
   "multi-lighting": {
-    brief: "Mockup project No. 4 for the product development team: a lighting family that works across rooms with as few unique parts as possible.",
-    approach: "One aluminum extrusion carries everything. Snap-on wings, layered end caps and a translucent diffuser turn the same 27.6 × 70.4 mm body into a 312 mm wall light or a 1.1 m pendant.",
+    brief: "Auxiliary lights — wall, powder-room, step and corridor lights — are rarely upgraded in new apartments. Developing a separate light for every room means new extrusion and injection tools each time, and the investment never pays back.",
+    approach: "One die, many products. A single aluminum extrusion is cut to length and combined with hook-on wings, end caps and a translucent diffuser; changing only the PCB and diffuser position turns it into a wall light, a pendant and more — cutting MOQ and cost while the family stays consistent.",
     points: [
-      ["One extrusion, two products", "The body section is shared; only the cut length changes — 230 mm for the wall light, 1,000 mm for the pendant."],
-      ["Hook-on wings", "Painted wings hook into T-slots on the body. No visible screws, and every part can be finished separately."],
-      ["Light both ways", "A 1.8 mm translucent acrylic strip on top washes the wall or ceiling, while the open bottom gives direct light."]
+      ["One extrusion, a whole family", "The 70.4 × 27.6 mm body is shared. 230 mm makes the wall light, 1,000 mm makes the pendant — same die, same parts."],
+      ["Variable PCB and diffuser", "LED boards and the diffuser can sit on top, bottom or both, so one profile gives up-light, down-light or both ways."],
+      ["End caps that soften the line", "Layered end caps turn a straight extrusion into a soft, curved object and give the light its depth."]
     ],
     dwg: "ML-04", scale: "2:1 / 1:10",
     figs: [
@@ -127,18 +125,18 @@ window.DETAILS = {
       ["Translucent acrylic", "1.8t upper diffuser", SW.frost]
     ],
     process: [
-      ["Research", "Reference board and fast form directions.", "Midjourney · ChatGPT"],
-      ["Modeling", "One profile, developed into a wall light and a pendant.", "Rhino"],
-      ["Engineering", "10 parts split for production, extrusion drawing, STEP / IGES.", "Rhino · DWG"],
-      ["Prototype", "FDM and TPU test prints to check fit, snap and assembly.", "3D printing"],
-      ["Spec sheet", "Part-by-part sheet with size, qty and finish for the mockup vendor.", "PowerPoint · Claude"],
-      ["Visualization", "Assembled renders of both fixtures.", "KeyShot"]
+      ["OBLIQUE", "Jun 2026 — first direction: a multi-angle light, one extrusion with variable PCB and diffuser positions.", "Midjourney · Sketch"],
+      ["MONOFORM", "Jul 2026 — one extrusion plus shades and covers: a pendant, three wall lights and a ceiling light.", "Rhino · KeyShot"],
+      ["Engineering", "Final profile, 10 parts with tolerances and wall thickness, extrusion drawing, STEP / IGES.", "Rhino · DWG"],
+      ["Prototype", "FDM and TPU test prints to check the hook-on wings, end caps and assembly.", "3D printing"],
+      ["Spec sheet", "Sep 2026 — part-by-part sheet with size, quantity and finish for the mockup vendor.", "PowerPoint · Claude"],
+      ["Visualization", "Assembled pendant and wall-light renders for the team review.", "KeyShot · Photoshop"]
     ],
     specs: [
-      ["Family", "Wall light · pendant, one shared extrusion"],
-      ["Pendant", "1,100 × 96 × 39 mm, body L 1,000 mm"],
-      ["Wall light", "312 × 96 × 46 mm, body L 230 mm"],
-      ["Body section", "70.4 × 27.6 mm aluminum extrusion"],
+      ["Pendant", "L 1040 × W 50 × H 95 mm · 30 W (15 + 15)"],
+      ["Wall light", "L 254 × W 40 × H 95 mm · 12 W (6 + 6)"],
+      ["Color temperature", "4000 K"],
+      ["Body section", "70.4 × 27.6 mm aluminum extrusion, shared"],
       ["Emission", "Up through translucent diffuser + direct down"],
       ["Finish", "PANTONE 11-4800 TPX matte white · raw aluminum"],
       ["Mockup", "10 parts, 1:1 · spec sheet issued 2026.09.02"]
@@ -158,43 +156,43 @@ window.DETAILS = {
   },
 
   "linear-desk": {
-    brief: "Long communal tables need even light along their whole length — without a lamp head standing between the people sitting across from each other.",
-    approach: "Reduce the lamp to a line. An 18 × 12 mm bar on two 10 mm legs runs the length of the table and puts glare-controlled light straight down.",
+    brief: "Long tables — a home desk, a communal bar — need even light along their whole length, without a lamp head standing between the people sitting across from each other.",
+    approach: "Reduce the lamp to a line. A slim bar turns down into its legs through one soft bend, so bar, joint and leg read as a single stroke; the same bar stands on discs along a bar table or clamps to a desk edge.",
     points: [
-      ["A line, not a lamp", "Bar, legs and desk fixing read as one continuous stroke, from a home desk to a 1.6 m bar."],
-      ["Low glare", "A micro-prism lens keeps UGR under 19, so the light stays on the table, not in your eyes."],
-      ["Through-desk fixing", "Legs pass through 12 mm holes and lock from below; the cable runs inside a leg."]
+      ["One continuous stroke", "The bar bends into the leg with a tapered radius — no visible joint, no head, just a line of light."],
+      ["Low glare, even light", "A micro-prism lens under the LED strip spreads light along the table while keeping it out of your eyes."],
+      ["Stand or clamp", "Three legs on base discs for a 1.6 m bar table; a C-clamp version for a desk, holding tops up to 40 mm."]
     ],
-    dwg: "LT-02", scale: "1:10 / 1:1",
+    dwg: "LT-02", scale: "1:10 / 3:1",
     figs: [
-      ["elev", "Elevation, 1:10", 8],
-      ["bar", "Bar section, 1:1", 4]
+      ["elev", "Elevation — bar-table version, 1:10", 12],
+      ["bar", "Bar section, 3:1", 6],
+      ["clamp", "Desk version — clamp, side view", 6]
     ],
     cmf: [
       ["Graphite", "Anodized aluminum bar", SW.graphite],
-      ["Stainless", "Brushed steel legs", SW.steel],
+      ["Satin aluminum", "Legs, bead-blasted", SW.steel],
       ["Prism lens", "PMMA, micro-prism", SW.frost]
     ],
     process: [
-      ["Concept", "Line studies — how thin a table light can get.", "Sketch"],
-      ["Modeling", "Bar section, lens and leg joint.", "Rhino"],
-      ["Visualization", "Dark interior scenes from desk to long bar.", "KeyShot"]
+      ["Concept", "Line studies — how thin a table light can get, and where the leg meets the bar.", "Sketch"],
+      ["Modeling", "Bar section, lens and the tapered corner joint.", "Rhino"],
+      ["Visualization", "From a dark home desk to a long bar table at night.", "KeyShot"]
     ],
     specs: [
-      ["Dimensions", "L 1600 × H 450 mm, bar 18 × 12 mm"],
-      ["Light source", "LED 24 W, linear"],
-      ["Output", "2,200 lm"],
-      ["Color temperature", "3000 K"],
-      ["CRI / Glare", "Ra 95 · UGR < 19"],
-      ["Control", "Touch dimmer on leg"],
-      ["Mounting", "Through-desk, Ø 12 mm"]
+      ["Bar-table version", "L 1600 × H 450 mm, 3 legs on base discs"],
+      ["Desk version", "Single span with C-clamp, tops ≤ 40 mm"],
+      ["Bar section", "18 × 12 mm"],
+      ["Light source", "LED strip, 3000 K"],
+      ["Optics", "Micro-prism lens, low glare"],
+      ["Materials", "Anodized aluminum · PMMA lens"]
     ],
     parts: [
       ["Light bar", "Aluminum extrusion, anodized"],
-      ["LED strip", "24 W, 3000 K"],
+      ["LED strip", "3000 K, on aluminum PCB"],
       ["Micro-prism lens", "PMMA, glare control"],
-      ["Leg", "Stainless steel Ø 10 mm", "", 2],
-      ["Desk fixing", "Threaded sleeve + nut", "", 2]
+      ["Leg", "Aluminum tube, tapered corner", "", 3],
+      ["Base disc / desk clamp", "Aluminum, satin"]
     ]
   },
 

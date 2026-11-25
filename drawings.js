@@ -2,11 +2,18 @@
 (() => {
   let uid = 0;
   const svg = (vb, body) => {
-    const id = "h" + (++uid);
+    const id = "h" + (++uid), m = id + "m";
     return `<svg class="dwg" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" role="img">
       <defs><pattern id="${id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="6" class="hl"/></pattern></defs>${body.replace(/HATCH/g, `url(#${id})`)}</svg>`;
+      <line x1="0" y1="0" x2="0" y2="6" class="hl"/></pattern>
+      <pattern id="${m}" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3.2" height="3.2" class="mbg"/><line x1="0" y1="0" x2="0" y2="3.2" class="hl"/></pattern></defs>
+      ${body.replace(/HATCH/g, `url(#${id})`).replace(/METAL/g, `url(#${m})`)}</svg>`;
   };
+  // 단면 표시(A–A), 상세 버블(B)
+  const secA = (x, y, L) => `<g class="secm"><path d="M${x} ${y} v13 M${x - 4} ${y + 7} L${x} ${y + 14} L${x + 4} ${y + 7}"/><text x="${x}" y="${y - 6}" text-anchor="middle">${L}</text></g>`;
+  const bub = (cx, cy, r, L, tx, ty) => `<g class="bub"><circle cx="${cx}" cy="${cy}" r="${r}"/><text x="${tx}" y="${ty}" text-anchor="middle">${L}</text></g>`;
+  const note = (x, y, t, a = "start") => `<text class="note" x="${x}" y="${y}" text-anchor="${a}">${t}</text>`;
   const dimH = (x1, x2, y, t, ey) => `<g class="dim">
     ${ey != null ? `<line x1="${x1}" y1="${ey}" x2="${x1}" y2="${y + 4}"/><line x1="${x2}" y1="${ey}" x2="${x2}" y2="${y + 4}"/>` : ""}
     <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}"/>
@@ -27,8 +34,8 @@
     const p = (q) => `${x2 - h * Math.cos(a + q)},${y2 - h * Math.sin(a + q)}`;
     return `<g class="arr"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/><path d="M${p(.45)} L${x2},${y2} L${p(-.45)}"/></g>`; };
   // 멀티라이팅: 압출 몸체(83 × 211), 날개(판 4.5, 하단 킥)
-  const mlBody = (x, y) => `<rect class="l body" x="${x}" y="${y}" width="83" height="211"/>
-    <rect class="l" x="${x + 6}" y="${y + 30}" width="71" height="151" fill="var(--bg)"/>
+  const mlBody = (x, y) => `<rect class="l" style="fill:METAL" x="${x}" y="${y}" width="83" height="211"/>
+    <rect class="l" x="${x + 6}" y="${y + 30}" width="71" height="151" style="fill:var(--bg)"/>
     <path class="l thin" d="M${x + 6} ${y} V${y + 24} H${x + 77} V${y} M${x + 6} ${y + 211} V${y + 187} H${x + 77} V${y + 211}"/>
     <path class="l thin" d="M${x} ${y + 8} h6 v12 h-6 M${x + 83} ${y + 8} h-6 v12 h6 M${x} ${y + 191} h6 v12 h-6 M${x + 83} ${y + 191} h-6 v12 h6"/>
     <rect class="glow" x="${x + 20}" y="${y + 26}" width="43" height="4"/><rect class="glow" x="${x + 20}" y="${y + 181}" width="43" height="4"/>`;
@@ -43,24 +50,63 @@
 
   const D = {
     flos: {
-      plan: () => svg("0 0 420 320", `
-        <line class="cl" x1="40" y1="152" x2="380" y2="152"/><line class="cl" x1="210" y1="32" x2="210" y2="272"/>
-        <rect class="l" x="60" y="50" width="300" height="204" rx="26"/>
-        <rect class="l thin" x="65" y="55" width="290" height="194" rx="21"/>
-        <rect class="l thin" x="70" y="60" width="280" height="184" rx="17"/>
-        <rect class="l thin" x="75" y="65" width="270" height="174" rx="13"/>
-        <rect class="glow l" x="82" y="72" width="256" height="160" rx="9"/>
-        <text class="lab" x="210" y="156" text-anchor="middle">A</text>
-        ${dimH(60, 360, 292, "620", 254)}${dimV(50, 254, 392, "420", 360)}`),
-      elev: () => svg("0 0 420 200", `
-        <rect x="20" y="26" width="380" height="14" fill="HATCH"/><line class="l" x1="20" y1="40" x2="400" y2="40"/>
-        <rect class="l" x="74" y="40" width="272" height="8"/>
-        <path class="l acr" d="M60 48 H360 V78 Q360 90 348 90 H72 Q60 90 60 78 Z"/>
-        <line class="l thin" x1="62" y1="57" x2="358" y2="57"/><line class="l thin" x1="62" y1="64" x2="358" y2="64"/>
-        <line class="l thin" x1="62" y1="71" x2="358" y2="71"/><line class="l thin" x1="62" y1="78" x2="358" y2="78"/>
-        <rect class="glow" x="82" y="88" width="256" height="3"/>
-        ${ray(130, 94, 104, 122)}${ray(210, 94, 210, 124)}${ray(290, 94, 316, 122)}
-        ${dimH(60, 360, 160, "620", 92)}${dimV(40, 90, 386, "82", 362)}`),
+      // 실제 제안서 사이즈: 거실 650×450×45, 안방 650×650×45, 침실 600×600×45
+      plan: () => svg("0 0 440 330", `
+        <line class="cl" x1="220" y1="28" x2="220" y2="286"/>
+        <line class="cut" x1="40" y1="157" x2="400" y2="157"/>${secA(50, 157, "A")}${secA(390, 157, "A")}
+        <rect class="l" x="74" y="56" width="292.5" height="202.5" rx="30"/>
+        <rect class="l thin" x="77" y="59" width="286.5" height="196.5" rx="27"/>
+        <rect class="l" x="80" y="62" width="280.5" height="190.5" rx="24"/>
+        <rect class="l thin" x="83" y="65" width="274.5" height="184.5" rx="21"/>
+        <rect class="l" x="86" y="68" width="268.5" height="178.5" rx="18"/>
+        <rect class="trimline" x="89" y="71" width="262.5" height="172.5" rx="15"/>
+        <rect class="glow l" x="92" y="74" width="256.5" height="166.5" rx="12"/>
+        ${bub(80, 157, 20, "B", 80, 128)}
+        ${note(220, 150, "LIGHT-EMITTING FACE", "middle")}
+        ${dimH(74, 366.5, 304, "650", 258.5)}${dimV(56, 258.5, 418, "450", 366.5)}`),
+      section: () => svg("0 0 640 190", `
+        <rect x="20" y="20" width="600" height="14" fill="HATCH"/><line class="l" x1="20" y1="34" x2="620" y2="34"/>
+        <path class="l acr" d="M92 34 H64 Q60 34 60 38 V46 H66 V58 H72 V66 Q72 70 76 70 H92 Z"/>
+        <path class="l acr" d="M548 34 H576 Q580 34 580 38 V46 H574 V58 H568 V66 Q568 70 564 70 H548 Z"/>
+        <path class="l" style="fill:METAL" d="M92 34 H548 V60 H546 V36.5 H94 V60 H92 Z"/>
+        <rect class="l" style="fill:METAL" x="300" y="36.5" width="40" height="5"/>
+        <rect class="l lgp" x="97" y="54" width="446" height="6"/>
+        <rect class="glow" x="94.5" y="53" width="2.5" height="8"/><rect class="glow" x="543" y="53" width="2.5" height="8"/>
+        <rect class="glow l" x="92" y="64" width="456" height="5"/>
+        <rect class="trim" x="88" y="64" width="5" height="6"/><rect class="trim" x="547" y="64" width="5" height="6"/>
+        ${ray(160, 74, 140, 124)}${ray(320, 74, 320, 128)}${ray(480, 74, 500, 124)}
+        ${ray(94, 57, 64, 30)}${ray(546, 57, 576, 30)}
+        ${bub(78, 52, 28, "B", 78, 16)}
+        ${dimH(60, 580, 166, "650", 72)}${dimV(34, 70, 612, "45", 582)}`),
+      detail: () => svg("0 0 680 330", `
+        <rect x="20" y="20" width="620" height="18" fill="HATCH"/><line class="l" x1="20" y1="38" x2="640" y2="38"/>
+        <path class="l acr" d="M200 38 H68 Q60 38 60 46 V98 H80 V158 H100 V210 Q100 218 108 218 H192 V212 H200 Z"/>
+        ${[53, 68, 83].map(y => `<line class="l thin" x1="62" y1="${y}" x2="198" y2="${y}"/>`).join("")}
+        ${[113, 128, 143].map(y => `<line class="l thin" x1="82" y1="${y}" x2="198" y2="${y}"/>`).join("")}
+        ${[173, 188, 203].map(y => `<line class="l thin" x1="102" y1="${y}" x2="190" y2="${y}"/>`).join("")}
+        <path class="l" style="fill:METAL" d="M200 38 H640 V41.5 H203.5 V190 H200 Z"/>
+        <path class="l" style="fill:METAL" d="M430 41.5 H500 V52 H494 V47 H436 V52 H430 Z"/>
+        <rect class="l opal" x="213" y="182" width="427" height="4"/>
+        <rect class="l pcb" x="204" y="184" width="6" height="26"/><rect class="glow" x="210" y="190" width="3" height="14"/>
+        <rect class="l lgp" x="213" y="186" width="427" height="16"/>
+        ${Array.from({ length: 29 }, (_, i) => `<circle class="dotp" cx="${222 + i * 14.5}" cy="200" r="1.1"/>`).join("")}
+        <rect class="l opal" x="200" y="206" width="440" height="6"/>
+        <rect class="trim" x="192" y="212" width="12" height="6"/>
+        ${ray(205, 194, 92, 120)}${ray(205, 200, 116, 196)}${ray(205, 188, 70, 60)}
+        ${ray(300, 220, 286, 262)}${ray(470, 220, 470, 264)}${ray(600, 220, 612, 262)}
+        ${note(632, 197, "LIGHT GUIDE 4t · LASER-DOTTED", "end")}${note(632, 180, "REFLECTOR", "end")}${note(632, 228, "OPAL DIFFUSER 1.5t", "end")}
+        ${note(66, 236, "LAYERED CLEAR PC RIM")}
+        ${co(560, 40, 660, 70, 1)}${co(466, 49, 660, 104, 2)}${co(207, 206, 236, 300, 3)}${co(360, 194, 360, 300, 4)}
+        ${co(420, 209, 430, 300, 5)}${co(70, 120, 70, 300, 6)}${co(196, 216, 156, 300, 7)}
+        ${dimV(38, 218, 30, "45", 58)}${dimH(60, 200, 262, "35", 222)}`),
+      family: () => svg("0 0 640 230", `
+        ${[[40, 162.5, 112.5, "LIVING ROOM", "650 × 450", "LED 60 W"], [244, 162.5, 162.5, "MASTER BEDROOM", "650 × 650", "LED 40 W"], [448, 150, 150, "BEDROOM", "600 × 600", "LED 40 W"]]
+          .map(([x, w, h, n, d, wt]) => `
+          <rect class="l" x="${x}" y="${190 - h}" width="${w}" height="${h}" rx="9"/>
+          <rect class="l thin" x="${x + 3}" y="${193 - h}" width="${w - 6}" height="${h - 6}" rx="7"/>
+          <rect class="glow l" x="${x + 7}" y="${197 - h}" width="${w - 14}" height="${h - 14}" rx="4"/>
+          <text class="lab2" x="${x}" y="${178 - h}">${n}</text>
+          <text x="${x}" y="208">${d} × 45 mm</text><text x="${x}" y="220">${wt} · PC / AL / STEEL</text>`).join("")}`),
       exploded: () => { const cx = 230; return svg("0 0 520 470", `
         <line class="cl" x1="${cx}" y1="30" x2="${cx}" y2="440"/>
         <line class="cl" x1="${cx - 150}" y1="100" x2="${cx - 150}" y2="380"/><line class="cl" x1="${cx + 150}" y1="100" x2="${cx + 150}" y2="380"/>
@@ -73,42 +119,33 @@
         ${iso(cx, 44, 90, 26, 4, "l body", 5)}
         ${isoCo(cx, 44, 90, 26, 2)}${isoCo(cx, 100, 186, 125, 1)}${isoCo(cx, 156, 182, 121, 3)}${isoCo(cx, 206, 182, 121, 4)}
         ${isoCo(cx, 258, 186, 125, 5)}${isoCo(cx, 312, 192, 131, 7)}${isoCo(cx, 372, 196, 135, 6)}`); },
-      detail: () => svg("0 0 640 260", `
-        <rect x="20" y="20" width="600" height="14" fill="HATCH"/><line class="l" x1="20" y1="34" x2="620" y2="34"/>
-        <rect class="l" x="190" y="34" width="56" height="9"/>
-        <path class="l" d="M150 34 V50 H620"/><line class="l" x1="150" y1="52" x2="620" y2="52"/>
-        <rect class="l" x="150" y="60" width="16" height="24"/><rect class="glow" x="162" y="64" width="4" height="16"/>
-        <rect class="l lgp" x="166" y="64" width="454" height="10"/>
-        <rect class="glow l" x="166" y="76" width="454" height="6"/>
-        <path class="l acr" d="M150 50 H138 V64 H124 V78 H110 V94 Q110 104 120 104 H200 V84 H166 V60 H150 Z"/>
-        <line class="l thin" x1="124" y1="86" x2="196" y2="86"/><line class="l thin" x1="124" y1="92" x2="196" y2="92"/><line class="l thin" x1="124" y1="98" x2="196" y2="98"/>
-        <rect class="trim" x="136" y="46" width="64" height="4"/>
-        ${ray(260, 88, 236, 150)}${ray(330, 88, 330, 154)}${ray(400, 88, 424, 150)}
-        ${co(560, 51, 560, 214, 1)}${co(218, 38, 260, 214, 2)}${co(158, 72, 210, 214, 3)}
-        ${co(480, 69, 460, 214, 4)}${co(420, 79, 400, 214, 5)}${co(116, 96, 110, 214, 6)}${co(170, 48, 160, 214, 7)}
-        ${dimV(34, 104, 72, "82", 110)}`)
     },
     "clear-sconce": {
-      front: () => svg("0 0 300 360", `
-        <line class="cl" x1="150" y1="24" x2="150" y2="336"/>
-        <path class="l acr" d="M100 132 V62 Q100 40 122 40 H178 Q200 40 200 62 V132"/>
-        <path class="l acr" d="M100 228 V298 Q100 320 122 320 H178 Q200 320 200 298 V228"/>
-        <rect class="l body" x="108" y="130" width="84" height="100"/>
-        ${[118, 128, 138, 148, 158, 168, 178].map(x => `<line class="l thin" x1="${x + 2}" y1="134" x2="${x + 2}" y2="226"/>`).join("")}
-        <rect class="l" x="104" y="130" width="4" height="100"/><rect class="l" x="192" y="130" width="4" height="100"/>
-        <rect class="glow" x="110" y="126" width="80" height="3"/><rect class="glow" x="110" y="231" width="80" height="3"/>
-        ${co(194, 200, 250, 250, 6)}
-        ${dimH(100, 200, 346, "120", 322)}${dimV(40, 320, 268, "260", 204)}`),
-      side: () => svg("0 0 300 360", `
-        <rect x="26" y="20" width="16" height="320" fill="HATCH"/><line class="l" x1="42" y1="20" x2="42" y2="340"/>
-        <rect class="l" x="42" y="150" width="6" height="60"/>
-        <rect class="l body" x="48" y="130" width="58" height="100"/>
-        <path class="acr-thick" d="M58 130 C58 96 112 96 132 64 L144 40"/><path class="l" d="M58 130 C58 96 112 96 132 64 L144 40"/>
-        <path class="acr-thick" d="M58 230 C58 264 112 264 132 296 L144 320"/><path class="l" d="M58 230 C58 264 112 264 132 296 L144 320"/>
-        <rect class="glow" x="60" y="126" width="40" height="3"/><rect class="glow" x="60" y="231" width="40" height="3"/>
-        ${ray(80, 122, 128, 30)}${ray(96, 122, 170, 46)}${ray(80, 238, 128, 330)}${ray(96, 238, 170, 314)}
-        ${co(45, 196, 22, 252, 1)}${co(90, 180, 200, 180, 2)}${co(80, 127, 210, 120, 3)}${co(120, 80, 220, 76, 4)}${co(120, 280, 220, 284, 5)}
-        ${dimH(42, 144, 348, "90", 322)}`)
+      front: () => svg("0 0 360 380", `
+        <line class="cl" x1="180" y1="20" x2="180" y2="326"/>
+        <path class="l acr" d="M54 131 V50 Q54 40 64 40 H296 Q306 40 306 50 V131 Z"/>
+        <path class="l acr" d="M54 215 V296 Q54 306 64 306 H296 Q306 306 306 296 V215 Z"/>
+        <line class="l thin" x1="60" y1="47" x2="300" y2="47"/><line class="l thin" x1="60" y1="299" x2="300" y2="299"/>
+        <rect class="l body" x="54" y="131" width="252" height="84"/>
+        ${Array.from({ length: 13 }, (_, i) => `<line class="l thin" x1="58" y1="${137 + i * 6}" x2="302" y2="${137 + i * 6}" opacity=".25"/>`).join("")}
+        <rect class="l" style="fill:METAL" x="50" y="131" width="4" height="84"/><rect class="l" style="fill:METAL" x="306" y="131" width="4" height="84"/>
+        <rect class="glow" x="56" y="127" width="248" height="3"/><rect class="glow" x="56" y="216" width="248" height="3"/>
+        ${co(150, 172, 22, 186, 2)}${co(140, 86, 22, 86, 4)}${co(140, 262, 22, 262, 5)}${co(52, 140, 22, 132, 6)}
+        ${dimH(54, 306, 352, "180", 310)}${dimV(40, 306, 336, "190", 306)}`),
+      side: () => svg("0 0 300 380", `
+        <rect x="16" y="20" width="14" height="330" fill="HATCH"/><line class="l" x1="30" y1="20" x2="30" y2="350"/>
+        <rect class="l" style="fill:METAL" x="30" y="147" width="6" height="52"/>
+        <path class="l" style="fill:METAL" d="M36 131 H96 Q126 173 96 215 H36 Z"/>
+        <path class="l" style="fill:var(--bg)" d="M42 137 H92 Q116 173 92 209 H42 Z"/>
+        <rect class="l pcb" x="44" y="137" width="30" height="3"/><rect class="l pcb" x="44" y="206" width="30" height="3"/>
+        <rect class="glow" x="46" y="133" width="26" height="4"/><rect class="glow" x="46" y="209" width="26" height="4"/>
+        <path class="acr-thick" d="M100 131 Q66 131 62 108 V60 Q62 40 82 34"/><path class="l" d="M100 131 Q66 131 62 108 V60 Q62 40 82 34"/>
+        <path class="acr-thick" d="M100 215 Q66 215 62 238 V286 Q62 306 82 312"/><path class="l" d="M100 215 Q66 215 62 238 V286 Q62 306 82 312"/>
+        ${ray(50, 128, 36, 40)}${ray(58, 128, 50, 26)}${ray(50, 218, 36, 306)}${ray(58, 218, 50, 320)}
+        ${ray(70, 104, 96, 30)}${ray(70, 242, 96, 316)}
+        ${note(150, 30, "UP-LIGHT WASHES THE WALL")}${note(150, 340, "DOWN-LIGHT WASHES THE WALL")}
+        ${co(33, 192, 210, 222, 1)}${co(104, 176, 210, 176, 2)}${co(62, 135, 210, 136, 3)}${co(62, 84, 210, 84, 4)}${co(62, 262, 210, 262, 5)}
+        ${dimH(30, 111, 364, "60", 318)}`)
     },
     "multi-lighting": {
       // 실제 시방서 치수 기준 (3 unit = 1 mm). 몸체 27.6 × 70.4, 날개 95, 앤드캡 96 × 39
@@ -121,7 +158,7 @@
         ${ray(118, 288, 102, 376)}${ray(130, 288, 130, 378)}${ray(142, 288, 158, 376)}
         ${co(160, 67, 212, 36, 2)}${co(174, 160, 212, 150, 4)}${co(166, 236, 212, 250, 5)}${co(188.5, 322, 212, 322, 1)}
         ${dimH(88.5, 171.5, 16, "27.6", 64)}${dimV(70, 281, 30, "70.4", 84)}
-        ${dimV(57, 345, 236, "96", 189)}${dimH(71.5, 188.5, 393, "39", 346)}`),
+        ${dimV(57, 342, 236, "95", 189)}${dimH(70.5, 189.5, 393, "50", 346)}`),
       wall: () => svg("0 0 260 400", `
         <rect x="14" y="16" width="14" height="370" fill="HATCH"/><line class="l" x1="28" y1="16" x2="28" y2="386"/>
         <rect class="hid" x="28" y="57" width="138" height="288" rx="4"/>
@@ -132,7 +169,7 @@
         ${ray(80, 288, 54, 378)}${ray(96, 288, 96, 380)}${ray(112, 288, 136, 376)}
         ${co(118, 67, 206, 36, 7)}${co(134.5, 160, 206, 150, 8)}${co(124, 236, 206, 236, 9)}
         ${co(40, 270, 206, 280, 10)}${co(166, 330, 206, 330, 6)}
-        ${dimV(57, 345, 236, "96", 167)}${dimH(28, 166, 393, "46", 346)}`),
+        ${dimV(57, 342, 236, "95", 167)}${dimH(28, 166, 393, "40", 346)}`),
       flange: () => svg("0 0 260 400", `
         <line class="cl" x1="130" y1="44" x2="130" y2="226"/><line class="cl" x1="40" y1="135" x2="220" y2="135"/>
         <rect class="l wing" x="55" y="60" width="150" height="150" rx="18"/>
@@ -160,7 +197,7 @@
         ${ray(220, 143, 210, 104)}${ray(540, 143, 550, 104)}
         ${ray(220, 214, 204, 252)}${ray(380, 214, 380, 254)}${ray(540, 214, 556, 252)}
         ${co(130, 31, 176, 66, 3)}${co(320, 148, 340, 104, 2)}${co(440, 176, 452, 116, 4)}${co(705, 172, 730, 112, 1)}
-        ${dimH(50, 710, 278, "1100", 212)}${dimV(150, 207.6, 744, "96", 712)}${dimV(28, 150, 40, "≤ 1500", 84)}`),
+        ${dimH(50, 710, 278, "1040", 212)}${dimV(150, 207.6, 744, "96", 712)}${dimV(28, 150, 40, "≤ 1500", 84)}`),
       // 벽등 축측 분해도 (실제 부품 치수, mm × 1.2)
       exploded: () => {
         const cx = 300, cy = 205, k = 1.2;
@@ -194,24 +231,37 @@
       }
     },
     "linear-desk": {
-      elev: () => svg("0 0 460 230", `
-        <rect x="20" y="172" width="420" height="12" fill="HATCH"/><line class="l" x1="20" y1="172" x2="440" y2="172"/>
-        <rect class="l" x="62" y="62" width="5" height="122"/><rect class="l" x="393" y="62" width="5" height="122"/>
-        <rect class="l" x="57" y="184" width="15" height="6"/><rect class="l" x="388" y="184" width="15" height="6"/>
-        <rect class="l body" x="55" y="54" width="350" height="8" rx="4"/>
-        <rect class="glow" x="72" y="62" width="316" height="2"/>
-        ${ray(110, 66, 86, 168)}${ray(230, 66, 230, 168)}${ray(350, 66, 374, 168)}
-        ${co(395, 120, 424, 120, 4)}${co(64, 187, 40, 214, 5)}
-        ${dimH(55, 405, 30, "1600", 54)}${dimV(54, 172, 446, "450", 405)}`),
-      bar: () => svg("0 0 220 230", `
-        <line class="cl" x1="110" y1="30" x2="110" y2="200"/>
-        <rect class="l body" x="70" y="60" width="80" height="52" rx="16" fill="HATCH"/>
-        <rect class="l" x="84" y="78" width="52" height="16" fill="var(--bg)"/>
-        <rect class="glow" x="92" y="90" width="36" height="4"/>
-        <path class="l acr" d="M84 100 Q110 112 136 100 V96 H84 Z"/>
-        ${ray(96, 110, 70, 200)}${ray(124, 110, 150, 200)}
-        ${co(140, 66, 186, 50, 1)}${co(110, 92, 186, 130, 2)}${co(124, 104, 186, 160, 3)}
-        ${dimH(70, 150, 36, "18", 60)}${dimV(60, 112, 30, "12", 70)}`)
+      elev: () => svg("0 0 600 230", `<g transform="translate(60 0)">
+        <rect x="16" y="172" width="448" height="12" fill="HATCH"/><line class="l" x1="16" y1="172" x2="464" y2="172"/>
+        <rect class="l body" x="58" y="56" width="364" height="4.5" rx="1.5"/>
+        <path class="l body" d="M44.5 168 V78 Q44.5 58 62 56 V60.5 Q48.5 63 48.5 78 V168 Z"/>
+        <path class="l body" d="M435.5 168 V78 Q435.5 58 418 56 V60.5 Q431.5 63 431.5 78 V168 Z"/>
+        <rect class="l body" x="298.5" y="60.5" width="3" height="107.5"/>
+        <rect class="l body" x="37.5" y="168" width="18" height="4" rx="1"/><rect class="l body" x="291" y="168" width="18" height="4" rx="1"/><rect class="l body" x="424.5" y="168" width="18" height="4" rx="1"/>
+        <rect class="glow" x="64" y="60.5" width="230" height="1.8"/><rect class="glow" x="306" y="60.5" width="110" height="1.8"/>
+        ${ray(120, 64, 104, 168)}${ray(200, 64, 200, 168)}${ray(360, 64, 376, 168)}
+        ${co(250, 58, 250, 100, 1)}${co(150, 62, 150, 112, 2)}${co(301.5, 130, 330, 130, 4)}${co(433, 170, 408, 146, 5)}
+        ${dimH(44.5, 435.5, 30, "1600", 56)}${dimV(56, 172, 468, "450", 438)}</g>`),
+      bar: () => svg("0 0 240 240", `
+        <line class="cl" x1="120" y1="40" x2="120" y2="222"/>
+        <path class="l" style="fill:METAL" d="M84 70 H156 Q174 70 174 88 V142 H66 V88 Q66 70 84 70 Z"/>
+        <rect class="l" x="80" y="96" width="80" height="46" style="fill:var(--bg)"/>
+        <rect class="l pcb" x="84" y="100" width="72" height="5"/>
+        <rect class="glow" x="96" y="105" width="8" height="3"/><rect class="glow" x="116" y="105" width="8" height="3"/><rect class="glow" x="136" y="105" width="8" height="3"/>
+        <rect class="l acr" x="80" y="132" width="80" height="6"/>
+        <path class="l thin" d="M80 138 ${Array.from({ length: 10 }, (_, i) => `l4 3 l4 -3`).join(" ")}"/>
+        ${ray(100, 142, 72, 216)}${ray(120, 142, 120, 218)}${ray(140, 142, 168, 216)}
+        ${co(170, 82, 214, 60, 1)}${co(150, 102, 214, 104, 2)}${co(152, 135, 214, 140, 3)}
+        ${dimH(66, 174, 52, "18", 70)}${dimV(70, 142, 40, "12", 66)}`),
+      clamp: () => svg("0 0 260 240", `
+        <rect x="20" y="130" width="180" height="24" fill="HATCH"/><rect class="l" x="20" y="130" width="180" height="24"/>
+        <path class="l" style="fill:METAL" d="M150 122 H226 V170 H196 V162 H218 V130 H150 Z"/>
+        <path class="l body" d="M158 122 V50 Q158 32 140 30 H30 V36 H138 Q164 38 164 52 V122 Z"/>
+        <rect class="glow" x="30" y="36" width="104" height="1.8"/>
+        <rect class="l body" x="205" y="170" width="6" height="14"/><rect class="l body" x="199" y="184" width="18" height="5" rx="2"/>
+        ${note(24, 124, "DESK")}
+        ${co(161, 90, 214, 76, 4)}${co(222, 150, 244, 120, 5)}
+        ${dimV(130, 154, 244, "≤ 40", 226)}`)
     },
     "cove-studies": {
       cove: () => svg("0 0 420 240", `

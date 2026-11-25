@@ -238,40 +238,68 @@ window.DETAILS = {
   }
 };
 
-// 실물 사진 (실물이미지 폴더) — rows: full | wide | pair | duo | trio
-// 각 행: [레이아웃, [[파일, 캡션], ...]]
+// JUMAK식 구성용: 한글 개요(kr), 큰 질문(q), 디자인 디렉션(dir), 실물 사진(real)
+// real.rows: [레이아웃, [[파일, 영문 제목, 한글 설명], ...]]  레이아웃 = full | wide | pair | duo | trio | stair
 (() => {
-  const R = {
+  const X = {
     flos: {
-      kicker: "First sample",
-      title: "Lit, for real.",
-      lead: "The first working sample, switched on in a dark room. Each tier of the PC rim holds its own line of light, so the edge reads as a soft double outline, the way the renders promised.",
-      rows: [
-        ["pair", [["real-flos-warm.webp", "Warm white"], ["real-flos-cool.webp", "Cool white, same sample"]]],
-        ["wide", [["real-flos-edge.webp", "Corner of the layered rim: light steps down tier by tier"]]]
-      ]
+      kr: "래미안 조명 차별화 제안의 일부로 진행한 거실·침실 메인등입니다. 집에서 가장 눈에 띄는 조명이지만 대부분은 천장에 붙은 평평한 흰 판에 그칩니다. 투명 PC를 계단처럼 겹친 테두리가 엣지 조명 패널을 감싸, 두께 45mm 안에서 테두리가 겹친 유리처럼 빛나도록 했습니다.",
+      q: ["How can a ceiling light", "feel lighter than the ceiling?"],
+      qkr: "천장보다 가벼워 보이는 천장등은 가능할까?",
+      dir: { label: "Design direction", t: "Layered Glass", kr: "겹겹이 쌓인 빛", img: "flos-07.webp" },
+      real: {
+        kicker: "Archive — first sample", krk: "첫 번째 샘플",
+        title: "Lit, for real.",
+        lead: "The first working sample, switched on in a dark room. Each tier of the rim holds its own line of light — the edge reads as a soft double outline, exactly as rendered.",
+        rows: [
+          ["duo", [["real-flos-sample.webp", "First light", "어두운 방에서 처음 켠 샘플"], ["real-flos-edge.webp", "Layered rim", "단마다 끊기며 내려오는 테두리의 빛"]]]
+        ]
+      }
+    },
+    "clear-sconce": {
+      kr: "복도와 침대 옆 벽을 위한 벽등입니다. 꺼져 있을 때는 작은 오브제로, 켜졌을 때는 벽을 부드럽게 물들이는 빛으로 읽히도록 했습니다. 알루미늄 밴드가 LED를 품고, 위아래로 휘어진 투명 아크릴이 빛을 두께 방향으로 끌고 가 가장자리에서 빛나게 합니다.",
+      q: ["Let the material", "carry the light."],
+      qkr: "빛은 재료가 옮긴다.",
+      dir: { label: "Design direction", t: "Bent, not framed", kr: "프레임 대신 구부린 아크릴", img: "multi-02.webp" }
     },
     "multi-lighting": {
-      kicker: "Full-scale mockup",
-      title: "Two lights, one profile, built.",
-      lead: "The wall light and the pendant were printed, assembled and hung on a display stand at full size, to check proportion, glare and the up-and-down light split before tooling.",
-      rows: [
-        ["duo", [["real-multi-stand.webp", "Wall light and pendant on the display stand, 4000K"], ["real-multi-warm.webp", "Pendant mockup in a showroom setting"]]],
-        ["wide", [["real-multi-wall.webp", "Wall light: up and down light from a single extrusion"]]],
-        ["pair", [["real-multi-side.webp", "Three-quarter view"], ["real-multi-front.webp", "Unlit, the profile reads as one clean line"]]]
-      ]
+      kr: "신축 아파트에서 벽등, 파우더룸등, 계단등, 복도등 같은 보조 조명은 거의 바뀌지 않습니다. 방마다 새 조명을 개발하면 압출과 사출 금형을 매번 새로 만들어야 하고, 적은 물량으로는 비용을 회수하기 어렵기 때문입니다. 그래서 압출 하나로 제품군 전체를 만드는 구조를 설계했습니다. 길이만 바꿔 자르고, 날개와 엔드캡, 확산판을 조합해 벽등과 펜던트가 됩니다.",
+      q: ["One die.", "A whole family of light."],
+      qkr: "금형 하나로, 조명 한 가족을.",
+      dir: { label: "Design direction", t: "One profile, many rooms", kr: "하나의 단면, 여러 개의 방", img: "multi-05.webp" },
+      real: {
+        kicker: "Archive — full-scale mockup", krk: "실물 크기 목업",
+        title: "Two lights, one profile, built.",
+        lead: "Printed, assembled and hung on a display stand at full size — to check proportion, glare and the up-and-down light split before tooling.",
+        rows: [
+          ["duo", [["real-multi-stand.webp", "On the stand", "벽등과 펜던트를 스탠드에 함께 설치"], ["real-multi-warm.webp", "Showroom", "쇼룸에서 켠 펜던트 목업"]]],
+          ["pair", [["real-multi-wall.webp", "Up & down", "압출 하나에서 나오는 위아래 빛"], ["real-multi-end.webp", "End cap", "엔드캡과 와이어 디테일"]]]
+        ]
+      }
     },
     "linear-desk": {
-      kicker: "On the bench",
-      title: "Built by hand, then switched on.",
-      lead: "Printed corner joints, aluminum tube and LED strip, assembled and wired on the workbench. The mockup answered what the screen couldn't: how stiff the bar feels, how the corner meets the leg, and how bright it reads over a desk.",
-      rows: [
-        ["full", [["real-linear-bench.webp", "First light on the workbench"]]],
-        ["trio", [["real-linear-assemble.webp", "Fitting the bar"], ["real-linear-wire.webp", "Wiring the LED driver"], ["real-linear-check.webp", "Checking leg height and base"]]],
-        ["duo", [["real-linear-corner.webp", "Corner joint: bar and leg in one curve"], ["real-linear-corner2.webp", "Printed joint, matte white"]]],
-        ["pair", [["real-linear-lit.webp", "Light from below"], ["real-linear-joint.webp", "Leg head"]]]
-      ]
+      kr: "긴 테이블을 위한 조명입니다. 집의 책상이든 여럿이 앉는 바 테이블이든, 마주 앉은 사람 사이에 조명 머리가 서 있지 않으면서 길이 전체를 고르게 비춰야 합니다. 그래서 조명을 하나의 선으로 줄였습니다. 얇은 바가 한 번의 부드러운 곡선으로 다리가 되어, 바와 연결부와 다리가 한 획으로 읽힙니다.",
+      q: ["Reduce the lamp", "to a single line."],
+      qkr: "조명을 하나의 선으로.",
+      dir: { label: "Design direction", t: "One stroke", kr: "한 획으로 이어지는 바와 다리", img: "linear-09.webp" },
+      real: {
+        kicker: "Archive — on the bench", krk: "작업대 위에서",
+        title: "Built by hand, then switched on.",
+        lead: "Printed corner joints, aluminum tube and LED strip, assembled and wired on the workbench. The mockup answered what the screen couldn't: how stiff the bar feels, how the corner meets the leg, how bright it reads over a desk.",
+        rows: [
+          ["full", [["real-linear-bench.webp", "First light", "작업대에서 처음 켠 순간"]]],
+          ["stair", [["real-linear-assemble.webp", "Fitting", "바를 다리에 끼우기"], ["real-linear-wire.webp", "Wiring", "LED 드라이버 배선"], ["real-linear-joint.webp", "Leg head", "다리 상단 연결부 확인"]]],
+          ["pair", [["real-linear-check.webp", "Height", "다리 높이와 받침 확인"], ["real-linear-corner2.webp", "One stroke", "바와 다리를 잇는 곡선"]]],
+          ["wide", [["real-linear-corner.webp", "Printed joint", "출력한 코너 조인트, 무광 화이트"]]]
+        ]
+      }
+    },
+    "cove-studies": {
+      kr: "입주자는 천장이 완성되기 전까지 간접조명이 어떤 느낌일지 알기 어렵고, 그때는 이미 바꾸기 늦습니다. 그래서 방을 한 번 모델링한 뒤 여러 조명 조건으로 렌더링해, 코브 깊이와 색온도, 조명 조합을 이미지를 보고 고를 수 있게 했습니다.",
+      q: ["Light you feel,", "not see."],
+      qkr: "보이지 않고, 느껴지는 빛.",
+      dir: { label: "Study method", t: "One room, many lights", kr: "하나의 방, 여러 개의 빛", img: "cove-10.webp" }
     }
   };
-  for (const k in R) if (window.DETAILS[k]) window.DETAILS[k].real = R[k];
+  for (const k in X) if (window.DETAILS[k]) Object.assign(window.DETAILS[k], X[k]);
 })();

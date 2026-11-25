@@ -23,8 +23,23 @@
   const row = (label, inner) => `<div class="row12 rv"><span class="mono">${label}</span>${inner}</div>`;
   const sec = (inner, cls = "") => `<section class="sec ${cls}">${inner}</section>`;
 
-  // 브리프 · 접근
-  const story = !d ? "" : sec(row("Brief", `<p class="c lead">${esc(d.brief)}</p>`) + row("Approach", `<p class="c lead">${esc(d.approach)}</p>`), "story");
+  // 크레딧 띠 (JUMAK식)
+  const TOOLS = { "Product Design": "Sketch · Rhino", "Design": "Sketch · Rhino", "Concept": "Sketch · Midjourney", "3D Modeling": "Rhino", "Engineering": "Rhino", "Mockup": "3D print · Assembly", "Rendering": "KeyShot", "Lighting Planning": "Rhino · KeyShot", "Visualization": "KeyShot" };
+  const credits = `<section class="credits rv">${p.role.split("·").map(r => r.trim()).map(r => `
+    <div><span class="mono">${esc(r)}</span><b>${esc(cap(SITE.name))}</b><i>${esc(TOOLS[r] || "")}</i></div>`).join("")}
+    <div><span class="mono">${esc(p.client)}</span><b>${esc(p.year)}</b><i>${esc(p.category)}</i></div></section>`;
+
+  // 개요: 영문 + 한글
+  const story = !d ? "" : `<section class="ov rv"><span class="mono">Overview</span>
+    <p class="en">${esc(d.brief)}</p>${d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}</section>`;
+
+  // 큰 질문 문장
+  const quest = !(d && d.q) ? "" : `<section class="quest rv"><h2>${d.q.map(esc).join("<br>")}</h2>${d.qkr ? `<p>${esc(d.qkr)}</p>` : ""}</section>`;
+
+  // 디렉션: 글 왼쪽, 이미지 오른쪽
+  const dir = !(d && d.dir) ? "" : `<section class="dirx rv">
+    <div class="tx"><span class="mono">${esc(d.dir.label)}</span><h3>${esc(d.dir.t)}</h3><span class="krs">${esc(d.dir.kr)}</span><p>${esc(d.approach)}</p></div>
+    <div class="ph"><img src="img/${d.dir.img}" alt="${esc(d.dir.t)}" loading="lazy"></div></section>`;
 
   // 디자인 포인트
   const points = !d ? "" : sec(row("Design points", `<ol class="c2 pts">${d.points.map(([t, x], i) => `
@@ -51,9 +66,10 @@
 
   // 갤러리 사이사이에 설명 문단, 첫 문단 뒤에 디자인 포인트 + 도면
   let bi = 0, placed = false;
-  const rows = p.gallery.map((r, i) => {
+  const gal = p.gallery.map(r => r.filter(f => !(d && d.dir && d.dir.img === f))).filter(r => r.length);
+  const rows = gal.map((r, i) => {
     let html = `<div class="row ${r.length > 1 ? "two" : "one"} rv">${r.map(f => `<div class="ph"><img src="img/${f}" alt="${esc(p.title)}" loading="lazy"></div>`).join("")}</div>`;
-    if ((i === 1 || (i > 1 && (i - 1) % 3 === 0)) && bi < p.body.length && i < p.gallery.length - 1) {
+    if ((i === 1 || (i > 1 && (i - 1) % 3 === 0)) && bi < p.body.length && i < gal.length - 1) {
       html += `<div class="note rv"><p>${esc(p.body[bi++])}</p></div>`;
       if (!placed) { html += sheet; placed = true; }
     }
@@ -69,14 +85,14 @@
   const parts = !d ? "" : row("Components", `<ol class="c2 parts">${d.parts.map(([n, m, sz, q]) => `
     <li><span>${esc(n)}${q > 1 ? ` <small>× ${q}</small>` : ""}</span><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
   const asm = !d ? "" : sec((d.asm ? row("Assembly", `<figure class="c2 asmfig">${drawing(p.slug, d.asm)}<figcaption class="mono"><b>Exploded view</b>Numbers match the component list</figcaption></figure>`) : "") + parts);
-  // 실물 사진
+  // 실물 사진 (흑백 아카이브)
   let rn = 0;
   const real = !(d && d.real) ? "" : `
     <section class="real">
-      <div class="rh rv"><span class="mono">${esc(d.real.kicker)}</span><h2>${esc(d.real.title)}</h2><p>${esc(d.real.lead)}</p></div>
-      ${d.real.rows.map(([t, fs]) => `<div class="rr ${t} rv">${fs.map(([f, c]) => `
-        <figure><div class="ph"><img src="img/${f}" alt="${esc(c)}" loading="lazy"></div>
-          <figcaption class="mono"><b>R—${pad(++rn)}</b>${esc(c)}</figcaption></figure>`).join("")}</div>`).join("")}
+      <div class="rh rv"><span class="mono">${esc(d.real.kicker)}<br>${esc(d.real.krk || "")}</span><h2>${esc(d.real.title)}</h2><p>${esc(d.real.lead)}</p></div>
+      ${d.real.rows.map(([t, fs]) => `<div class="rr ${t} rv">${fs.map(([f, en, kr]) => `
+        <figure><div class="ph"><img src="img/${f}" alt="${esc(en)}" loading="lazy"></div>
+          <figcaption><span class="n">${++rn}</span><span class="t">${esc(en)}<small>${esc(kr || "")}</small></span></figcaption></figure>`).join("")}</div>`).join("")}
     </section>`;
   const spec = !d ? "" : sec(row("Specifications", `<dl class="c specs">${d.specs.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`));
 
@@ -90,15 +106,10 @@
     <section class="p-info">
       <h1 class="rv">${esc(p.title)}<small>${esc(p.kr)}</small></h1>
       <p class="sum rv">${esc(p.summary)}</p>
-      <dl class="rv">
-        <div><dt class="mono">Year</dt><dd>${esc(p.year)}</dd></div>
-        <div><dt class="mono">Category</dt><dd>${esc(p.category)}</dd></div>
-        <div><dt class="mono">Client</dt><dd>${esc(p.client)}</dd></div>
-        <div><dt class="mono">Role</dt><dd>${esc(p.role)}</dd></div>
-      </dl>
+
     </section>
 
-    ${story}
+    ${credits}${story}${quest}${dir}
     <section class="pg">${rows}${rest}</section>
     ${cmf}${proc}${real}${asm}${spec}
 

@@ -69,6 +69,15 @@
   const parts = !d ? "" : row("Components", `<ol class="c2 parts">${d.parts.map(([n, m, sz, q]) => `
     <li><span>${esc(n)}${q > 1 ? ` <small>× ${q}</small>` : ""}</span><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
   const asm = !d ? "" : sec((d.asm ? row("Assembly", `<figure class="c2 asmfig">${drawing(p.slug, d.asm)}<figcaption class="mono"><b>Exploded view</b>Numbers match the component list</figcaption></figure>`) : "") + parts);
+  // 실물 사진
+  let rn = 0;
+  const real = !(d && d.real) ? "" : `
+    <section class="real">
+      <div class="rh rv"><span class="mono">${esc(d.real.kicker)}</span><h2>${esc(d.real.title)}</h2><p>${esc(d.real.lead)}</p></div>
+      ${d.real.rows.map(([t, fs]) => `<div class="rr ${t} rv">${fs.map(([f, c]) => `
+        <figure><div class="ph"><img src="img/${f}" alt="${esc(c)}" loading="lazy"></div>
+          <figcaption class="mono"><b>R—${pad(++rn)}</b>${esc(c)}</figcaption></figure>`).join("")}</div>`).join("")}
+    </section>`;
   const spec = !d ? "" : sec(row("Specifications", `<dl class="c specs">${d.specs.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`));
 
   app.innerHTML = `
@@ -91,7 +100,7 @@
 
     ${story}
     <section class="pg">${rows}${rest}</section>
-    ${cmf}${proc}${asm}${spec}
+    ${cmf}${proc}${real}${asm}${spec}
 
     <a class="nextp rv" href="project.html?p=${nx.slug}">
       <span class="mono">Next project</span>
@@ -103,7 +112,7 @@
   reveal(); fadeImgs();
 
   // lightbox
-  const shots = [...document.querySelectorAll(".pg .ph img")];
+  const shots = [...document.querySelectorAll(".pg .ph img, .real .ph img")];
   document.body.insertAdjacentHTML("beforeend", `
     <div class="lb" role="dialog" aria-modal="true" aria-label="Image viewer"><img alt="">
       <div class="bar"><span class="mono ct"></span><div class="nav2"><button class="pv">Prev</button><button class="nx">Next</button><button class="x">Close</button></div></div>

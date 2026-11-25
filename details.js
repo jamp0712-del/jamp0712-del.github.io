@@ -237,3 +237,41 @@ window.DETAILS = {
     ]
   }
 };
+
+// 실물 사진 (실물이미지 폴더) — rows: full | wide | pair | duo | trio
+// 각 행: [레이아웃, [[파일, 캡션], ...]]
+(() => {
+  const R = {
+    flos: {
+      kicker: "First sample",
+      title: "Lit, for real.",
+      lead: "The first working sample, switched on in a dark room. Each tier of the PC rim holds its own line of light, so the edge reads as a soft double outline, the way the renders promised.",
+      rows: [
+        ["pair", [["real-flos-warm.webp", "Warm white"], ["real-flos-cool.webp", "Cool white, same sample"]]],
+        ["wide", [["real-flos-edge.webp", "Corner of the layered rim: light steps down tier by tier"]]]
+      ]
+    },
+    "multi-lighting": {
+      kicker: "Full-scale mockup",
+      title: "Two lights, one profile, built.",
+      lead: "The wall light and the pendant were printed, assembled and hung on a display stand at full size, to check proportion, glare and the up-and-down light split before tooling.",
+      rows: [
+        ["duo", [["real-multi-stand.webp", "Wall light and pendant on the display stand, 4000K"], ["real-multi-warm.webp", "Pendant mockup in a showroom setting"]]],
+        ["wide", [["real-multi-wall.webp", "Wall light: up and down light from a single extrusion"]]],
+        ["pair", [["real-multi-side.webp", "Three-quarter view"], ["real-multi-front.webp", "Unlit, the profile reads as one clean line"]]]
+      ]
+    },
+    "linear-desk": {
+      kicker: "On the bench",
+      title: "Built by hand, then switched on.",
+      lead: "Printed corner joints, aluminum tube and LED strip, assembled and wired on the workbench. The mockup answered what the screen couldn't: how stiff the bar feels, how the corner meets the leg, and how bright it reads over a desk.",
+      rows: [
+        ["full", [["real-linear-bench.webp", "First light on the workbench"]]],
+        ["trio", [["real-linear-assemble.webp", "Fitting the bar"], ["real-linear-wire.webp", "Wiring the LED driver"], ["real-linear-check.webp", "Checking leg height and base"]]],
+        ["duo", [["real-linear-corner.webp", "Corner joint: bar and leg in one curve"], ["real-linear-corner2.webp", "Printed joint, matte white"]]],
+        ["pair", [["real-linear-lit.webp", "Light from below"], ["real-linear-joint.webp", "Leg head"]]]
+      ]
+    }
+  };
+  for (const k in R) if (window.DETAILS[k]) window.DETAILS[k].real = R[k];
+})();

@@ -5,125 +5,118 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Project — Hojun Yu</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="project.css">
 </head>
-<body>
+<body class="pp">
 <main id="app"></main>
 <script src="data.js"></script>
 <script src="details.js"></script>
 <script src="drawings.js"></script>
+<script src="vs.js"></script>
 <script src="common.js"></script>
 <script>
   const slug = new URLSearchParams(location.search).get("p");
   const idx = Math.max(0, PROJECTS.findIndex(p => p.slug === slug));
   const p = PROJECTS[idx], nx = PROJECTS[(idx + 1) % PROJECTS.length];
-  const dark = p.theme === "dark";
+  const d = (window.DETAILS || {})[p.slug] || null;
+  const v = (window.VS || {})[p.slug] || null;
   document.title = `${p.title} — ${cap(SITE.name)}`;
 
-  const d = (window.DETAILS || {})[p.slug];
-  const row = (label, inner) => `<div class="row12 rv"><span class="mono">${label}</span>${inner}</div>`;
-  const sec = (inner, cls = "") => `<section class="sec ${cls}">${inner}</section>`;
-
-  // 크레딧 띠 (JUMAK식)
-  const TOOLS = { "Product Design": "Sketch · Rhino", "Design": "Sketch · Rhino", "Concept": "Sketch · Midjourney", "3D Modeling": "Rhino", "Engineering": "Rhino", "Mockup": "3D print · Assembly", "Rendering": "KeyShot", "Lighting Planning": "Rhino · KeyShot", "Visualization": "KeyShot" };
-  const credits = `<section class="credits rv">${p.role.split("·").map(r => r.trim()).map(r => `
-    <div><span class="mono">${esc(r)}</span><b>${esc(cap(SITE.name))}</b><i>${esc(TOOLS[r] || "")}</i></div>`).join("")}
-    <div><span class="mono">${esc(p.client)}</span><b>${esc(p.year)}</b><i>${esc(p.category)}</i></div></section>`;
-
-  // 개요: 영문 + 한글
-  const story = !d ? "" : `<section class="ov rv"><span class="mono">Overview</span>
-    <p class="en">${esc(d.brief)}</p>${d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}</section>`;
-
-  // 큰 질문 문장
-  const quest = !(d && d.q) ? "" : `<section class="quest rv"><h2>${d.q.map(esc).join("<br>")}</h2>${d.qkr ? `<p>${esc(d.qkr)}</p>` : ""}</section>`;
-
-  // 디렉션: 글 왼쪽, 이미지 오른쪽
-  const dir = !(d && d.dir) ? "" : `<section class="dirx rv">
-    <div class="tx"><span class="mono">${esc(d.dir.label)}</span><h3>${esc(d.dir.t)}</h3><span class="krs">${esc(d.dir.kr)}</span><p>${esc(d.approach)}</p></div>
-    <div class="ph"><img src="img/${d.dir.img}" alt="${esc(d.dir.t)}" loading="lazy"></div></section>`;
-
-  // 디자인 포인트
-  const points = !d ? "" : sec(row("Design points", `<ol class="c2 pts">${d.points.map(([t, x], i) => `
-    <li><span class="mono">${pad(i + 1)}</span><h3>${esc(t)}</h3><p>${esc(x)}</p></li>`).join("")}</ol>`));
-
-  // 도면 시트
-  const sheet = !d ? "" : `
-    </section>${points}
-    <section class="dw rv"><div class="sheet">
-      <div class="head"><span class="mono">Technical drawings</span><span class="mono">Dimensions in mm</span></div>
-      <div class="figs">${d.figs.map(([k, name, span], i) => `
-        <figure style="--s:${span}">${drawing(p.slug, k)}
-          <figcaption class="mono"><b>Fig. ${pad(i + 1)}</b>${esc(name)}</figcaption></figure>`).join("")}</div>
-      <div class="tb">
-        <div class="mono">Designer<span>${esc(cap(SITE.name))}</span></div>
-        <div class="mono">Project<span>${esc(p.title)}</span></div>
-        <div class="mono">Dwg no.<span>${esc(d.dwg)}</span></div>
-        <div class="mono">Scale<span>${esc(d.scale)}</span></div>
-        <div class="mono">Unit<span>mm</span></div>
-        <div class="mono">Date<span>${esc(p.year)}</span></div>
-      </div>
-    </div></section>
-    <section class="pg">`;
-
-  // 갤러리 사이사이에 설명 문단, 첫 문단 뒤에 디자인 포인트 + 도면
-  let bi = 0, placed = false;
-  const gal = p.gallery.map(r => r.filter(f => !(d && d.dir && d.dir.img === f))).filter(r => r.length);
-  const rows = gal.map((r, i) => {
-    let html = `<div class="row ${r.length > 1 ? "two" : "one"} rv">${r.map(f => `<div class="ph"><img src="img/${f}" alt="${esc(p.title)}" loading="lazy"></div>`).join("")}</div>`;
-    if ((i === 1 || (i > 1 && (i - 1) % 3 === 0)) && bi < p.body.length && i < gal.length - 1) {
-      html += `<div class="note rv"><p>${esc(p.body[bi++])}</p></div>`;
-      if (!placed) { html += sheet; placed = true; }
-    }
-    return html;
-  }).join("");
-  const rest = p.body.slice(bi).map(t => `<div class="note rv"><p>${esc(t)}</p></div>`).join("") + (placed ? "" : sheet);
-
-  // CMF · 프로세스 · 분해도 · 스펙
-  const cmf = !d ? "" : sec(row(d.cmfTitle || "Color, material, finish", `<ul class="c2 cmf">${d.cmf.map(([n, x, bg]) => `
-    <li><div class="sw" style="background:${bg}"></div><b>${esc(n)}</b><span>${esc(x)}</span></li>`).join("")}</ul>`));
-  const proc = !d ? "" : sec(row("Process", `<ol class="c2 proc" style="--n:${d.process.length > 4 ? 3 : d.process.length}">${d.process.map(([s, x, t], i) => `
-    <li><span class="mono">${pad(i + 1)}</span><b>${esc(s)}</b><p>${esc(x)}</p><span class="mono tool">${esc(t)}</span></li>`).join("")}</ol>`));
-  const parts = !d ? "" : row("Components", `<ol class="c2 parts">${d.parts.map(([n, m, sz, q]) => `
-    <li><span>${esc(n)}${q > 1 ? ` <small>× ${q}</small>` : ""}</span><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
-  const asm = !d ? "" : sec((d.asm ? row("Assembly", `<figure class="c2 asmfig">${drawing(p.slug, d.asm)}<figcaption class="mono"><b>Exploded view</b>Numbers match the component list</figcaption></figure>`) : "") + parts);
-  // 실물 사진 (흑백 아카이브)
-  let rn = 0;
-  const real = !(d && d.real) ? "" : `
-    <section class="real">
-      <div class="rh rv"><span class="mono">${esc(d.real.kicker)}<br>${esc(d.real.krk || "")}</span><h2>${esc(d.real.title)}</h2><p>${esc(d.real.lead)}</p></div>
-      ${d.real.rows.map(([t, fs]) => `<div class="rr ${t} rv">${fs.map(([f, en, kr]) => `
-        <figure><div class="ph"><img src="img/${f}" alt="${esc(en)}" loading="lazy"></div>
-          <figcaption><span class="n">${++rn}</span><span class="t">${esc(en)}<small>${esc(kr || "")}</small></span></figcaption></figure>`).join("")}</div>`).join("")}
+  const img = (f, cls = "") => `<div class="ph ${cls}"><img src="img/${f}" alt="${esc(p.title)}" loading="lazy"></div>`;
+  let ch = 0; // 챕터 번호
+  const chap = (title, sub, inner, cls = "") => `
+    <section class="chap ${cls} rv">
+      <header><span class="no">${pad(++ch)}</span><h3>${esc(title)}</h3>${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</header>
+      ${inner}
     </section>`;
-  const spec = !d ? "" : sec(row("Specifications", `<dl class="c specs">${d.specs.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`));
 
-  app.innerHTML = `
-    <section class="p-hero">
-      <img src="img/${p.cover}" alt="${esc(p.title)}">
-      <div class="mark ${dark ? "light" : ""}">${esc(p.title)}<i></i>${esc(p.category)}</div>
-      <span class="idx mono ${dark ? "light" : ""}">${pad(idx + 1)} / ${pad(PROJECTS.length)}</span>
-    </section>
+  // 갤러리: 디렉션 이미지는 중복 제거, 한 줄 1장(꽉) 또는 2장(반반)
+  const gal = p.gallery.map(r => r.filter(f => !(d && d.dir && d.dir.img === f))).filter(r => r.length);
+  const stack = rows => rows.map(r => `<div class="st ${r.length > 1 ? "two" : ""}">${r.map(f => img(f)).join("")}</div>`).join("");
+  const lead = gal.slice(0, 1), more = gal.slice(1);
 
-    <section class="p-info">
-      <h1 class="rv">${esc(p.title)}<small>${esc(p.kr)}</small></h1>
-      <p class="sum rv">${esc(p.summary)}</p>
+  // 1. 타이틀
+  const title = `
+    <section class="ttl">
+      <span class="kick rv">${pad(idx + 1)} — ${esc(p.category)}</span>
+      <h1 class="rv">${esc(p.title)}<em>${esc(p.tagline)}</em></h1>
+      <p class="rv">${esc(p.summary)}</p>
+      <dl class="rv">
+        <div><dt>Year</dt><dd>${esc(p.year)}</dd></div>
+        <div><dt>Type</dt><dd>${esc(p.kr)}</dd></div>
+        <div><dt>Client</dt><dd>${esc(p.client)}</dd></div>
+        <div><dt>Role</dt><dd>${esc(p.role)}</dd></div>
+      </dl>
+    </section>`;
 
-    </section>
+  // 2. 히어로 + 첫 이미지
+  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>`;
 
-    ${credits}${story}${quest}${dir}
-    <section class="pg">${rows}${rest}</section>
-    ${cmf}${proc}${real}${asm}${spec}
+  // 3. 두 톤 헤드라인 + 개요
+  const headline = v ? v.head : (d && d.q) || [p.tagline, ""];
+  const story = `
+    <section class="wrap say rv">
+      <h2>${esc(headline[0])} <span>${esc(headline[1] || "")}</span></h2>
+      ${d ? `<p>${esc(d.brief)}</p>` : ""}${d && d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}
+    </section>`;
 
-    <a class="nextp rv" href="project.html?p=${nx.slug}">
-      <span class="mono">Next project</span>
-      <div class="t">${esc(nx.title)}<small>${esc(nx.category)} →</small></div>
-      <div class="th"><img src="img/${nx.cover}" alt="" loading="lazy"></div>
+  // 4. 기존 → 새 방식 비교
+  const compare = !v ? "" : `
+    <section class="wrap vs rv">
+      <div class="pan"><b>${esc(v.a[0])}</b><span>${esc(v.a[1])}</span>${v.svg[0]}</div>
+      <div class="arr" aria-hidden="true">→</div>
+      <div class="pan on"><b>${esc(v.b[0])}</b><span>${esc(v.b[1])}</span>${v.svg[1]}</div>
+      <p class="ft2">${esc(v.from)} <i>→</i> <strong>${esc(v.to)}</strong></p>
+    </section>`;
+
+  // 5. 디렉션
+  const dir = !(d && d.dir) ? "" : `
+    <section class="wrap dir2 rv">
+      <div class="tx"><span class="lab">${esc(d.dir.label)}</span><h3>${esc(d.dir.t)}</h3><span class="krs">${esc(d.dir.kr)}</span><p>${esc(d.approach)}</p></div>
+      ${img(d.dir.img)}
+    </section>`;
+
+  // 6. 갤러리 나머지 + 설명 문단
+  const notes = p.body.map(t => `<p class="note2 rv">${esc(t)}</p>`);
+  const gallery = `<section class="wrap flush">${more.map((r, i) => stack([r]) + (i % 2 === 1 && notes.length ? notes.shift() : "")).join("")}</section>${notes.length ? `<section class="wrap">${notes.join("")}</section>` : ""}`;
+
+  // 7. 번호 챕터들
+  let chaps = "";
+  if (d) {
+    chaps += chap("Process", "From brief to final image", `<ol class="proc2">${d.process.map(([s, x, t], i) => `
+      <li><span class="n">${String.fromCharCode(65 + i)}</span><b>${esc(s)}</b><p>${esc(x)}</p><span class="tool">${esc(t)}</span></li>`).join("")}</ol>`);
+    chaps += chap("Design points", "What the form has to do", `<ol class="pts2">${d.points.map(([t, x], i) => `
+      <li><span class="n">${i + 1}.</span><h4>${esc(t)}</h4><p>${esc(x)}</p></li>`).join("")}</ol>`);
+    chaps += chap("Technical drawings", `${d.dwg} · Scale ${d.scale} · mm`, `<div class="dw2"><div class="figs">${d.figs.map(([k, name, span], i) => `
+      <figure style="--s:${span}">${drawing(p.slug, k)}<figcaption><b>Fig. ${pad(i + 1)}</b>${esc(name)}</figcaption></figure>`).join("")}</div></div>`);
+    if (d.real) {
+      let rn = 0;
+      const shots = d.real.rows.flatMap(([, fs]) => fs);
+      chaps += chap("Mockup & test", d.real.krk || "", `<p class="intro2">${esc(d.real.lead)}</p><div class="mock n${Math.min(shots.length, 4)}">${shots.map(([f, en, kr]) => `
+        <figure>${img(f)}<figcaption><b>${++rn}. ${esc(en)}</b>${esc(kr || "")}</figcaption></figure>`).join("")}</div>`, "dark");
+    }
+    chaps += chap(d.cmfTitle || "Color, material, finish", "", `<ul class="cmf2">${d.cmf.map(([n, x, bg]) => `
+      <li><div class="sw" style="background:${bg}"></div><b>${esc(n)}</b><span>${esc(x)}</span></li>`).join("")}</ul>`);
+    chaps += chap("Assembly", "Parts and finishes", `${d.asm ? `<div class="asm2">${drawing(p.slug, d.asm)}</div>` : ""}<ol class="parts2">${d.parts.map(([n, m, sz, q], i) => `
+      <li><span class="n">${i + 1}</span><b>${esc(n)}${q > 1 ? ` <small>× ${q}</small>` : ""}</b><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
+    chaps += chap("Specifications", "", `<dl class="spec2">${d.specs.map(([k, x]) => `<div><dt>${esc(k)}</dt><dd>${esc(x)}</dd></div>`).join("")}</dl>`);
+  }
+
+  // 8. 디테일 클로즈업
+  const close = !(v && v.close.length) ? "" : `<section class="wrap flush close">${v.close.map(f => img(f)).join("")}</section>`;
+
+  app.innerHTML = `${title}${hero}${story}${compare}${dir}${gallery}${close}<div class="chaps">${chaps}</div>
+    <a class="next2 rv" href="project.html?p=${nx.slug}">
+      <span>Next project</span>
+      <div class="t">${esc(nx.title)} <em>${esc(nx.tagline)}</em></div>
+      ${img(nx.cover)}
     </a>
     <footer class="ft"><span>© ${new Date().getFullYear()} ${esc(cap(SITE.name))}</span><a class="ul" href="index.html">All work</a></footer>`;
-  header({ darkHero: dark });
+  header();
   reveal(); fadeImgs();
 
   // lightbox
-  const shots = [...document.querySelectorAll(".pg .ph img, .real .ph img")];
+  const shots = [...document.querySelectorAll("#app .ph:not(.no-lb) img")].filter(im => !im.closest(".next2"));
   document.body.insertAdjacentHTML("beforeend", `
     <div class="lb" role="dialog" aria-modal="true" aria-label="Image viewer"><img alt="">
       <div class="bar"><span class="mono ct"></span><div class="nav2"><button class="pv">Prev</button><button class="nx">Next</button><button class="x">Close</button></div></div>
@@ -131,15 +124,15 @@
   const lb = document.querySelector(".lb"), lbImg = lb.querySelector("img"), ct = lb.querySelector(".ct");
   let at = 0;
   const open = i => { at = (i + shots.length) % shots.length; lbImg.src = shots[at].src; ct.textContent = `${pad(at + 1)} / ${pad(shots.length)}`; lb.classList.add("on"); document.body.style.overflow = "hidden"; };
-  const close = () => { lb.classList.remove("on"); document.body.style.overflow = ""; };
+  const closeLb = () => { lb.classList.remove("on"); document.body.style.overflow = ""; };
   shots.forEach((im, i) => im.closest(".ph").addEventListener("click", () => open(i)));
-  lb.querySelector(".x").onclick = close;
+  lb.querySelector(".x").onclick = closeLb;
   lb.querySelector(".pv").onclick = e => { e.stopPropagation(); open(at - 1); };
   lb.querySelector(".nx").onclick = e => { e.stopPropagation(); open(at + 1); };
-  lb.addEventListener("click", e => { if (e.target === lb || e.target === lbImg) close(); });
+  lb.addEventListener("click", e => { if (e.target === lb || e.target === lbImg) closeLb(); });
   addEventListener("keydown", e => {
     if (!lb.classList.contains("on")) return;
-    if (e.key === "Escape") close(); if (e.key === "ArrowLeft") open(at - 1); if (e.key === "ArrowRight") open(at + 1);
+    if (e.key === "Escape") closeLb(); if (e.key === "ArrowLeft") open(at - 1); if (e.key === "ArrowRight") open(at + 1);
   });
 </script>
 </body>

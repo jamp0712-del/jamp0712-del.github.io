@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hojun Yu — Industrial Designer</title>
+<meta name="description" content="Hojun Yu — industrial designer in Seoul. Product design, 3D engineering, 3D printing and rendering.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <section class="intro">
+    <h1 class="rv" id="lead"></h1>
+    <p class="kr rv" id="leadKr"></p>
+  </section>
+
+  <section class="work" id="work"></section>
+
+  <section class="info" id="info">
+    <div class="row12 about rv"><span class="mono">About</span><div class="c" id="about"></div></div>
+    <div class="row12 rv"><span class="mono">Capabilities</span><ul class="c2 caps" id="caps"></ul></div>
+    <div class="row12 rv"><span class="mono">Tools</span><p class="c tools" id="tools"></p></div>
+    <div class="row12 contact rv" id="contact"><span class="mono">Contact</span><div class="c2"><p class="big"><a id="mail"></a></p></div></div>
+  </section>
+</main>
+<footer class="ft"><span id="copy"></span><a class="ul" href="#">Back to top</a></footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script>
+  const S = SITE;
+  header();
+  lead.innerHTML = `${esc(cap(S.name))} is an industrial designer working the whole way through — <span>sketch, engineering, 3D-printed mockup and final image.</span>`;
+  leadKr.textContent = S.statementKr;
+
+  work.innerHTML = PROJECTS.map((p, i) => `
+    <a class="w rv" href="project.html?p=${p.slug}">
+      <div class="im">
+        <img src="img/${p.cover}" alt="${esc(p.title)}" ${i ? 'loading="lazy"' : ""}>
+        ${i === 0 ? `<div class="mark ${p.theme === "dark" ? "light" : ""}">${esc(p.title)}<i></i>${esc(p.category)}</div>` : ""}
+      </div>
+      <div class="cap">
+        <div><b>${esc(p.title)}</b><span>${esc(p.category)}</span> <span class="arr">→</span></div>
+        <span class="mono">${pad(i + 1)} — ${p.year}</span>
+      </div>
+    </a>`).join("");
+
+  about.innerHTML = S.about.map(t => `<p>${esc(t)}</p>`).join("") + `<p class="kr">${esc(S.statementKr)}</p>`;
+  caps.innerHTML = S.capabilities.map((c, i) => `<li><span class="mono">${pad(i + 1)}</span><span>${esc(c.t)}</span><em>${esc(c.d)}</em></li>`).join("");
+  tools.textContent = S.skills.join(", ");
+  mail.textContent = S.email; mail.href = "mailto:" + S.email;
+  copy.textContent = `© ${new Date().getFullYear()} ${cap(S.name)}`;
+  reveal(); fadeImgs();
+</script>
+</body>
+</html>

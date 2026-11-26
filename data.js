@@ -39,6 +39,7 @@ window.PROJECTS = [
       "FLOS started from one question: how can a flat ceiling light feel lighter than the ceiling it sits on? The answer was a layered, transparent rim that wraps a warm diffuser and turns its edge into a soft line of light.",
       "The same rim and trim were developed into three sizes — living room, master bedroom and bedroom — and tested in room scenes to check how each one holds its space."
     ],
+    chip: "flos-08.webp",
     cover: "flos-24.webp",
     gallery: [
       ["flos-01.webp"],
@@ -63,6 +64,7 @@ window.PROJECTS = [
     body: [
       "The acrylic is bent rather than framed, so each edge becomes a light guide. The metal body stays simple to let the glow on the wall do the work."
     ],
+    chip: "sconce-d1.webp",
     cover: "multi-03.webp",
     gallery: [
       ["multi-02.webp"]
@@ -83,6 +85,7 @@ window.PROJECTS = [
       "The family shares one 27.6 × 70.4 mm extrusion. Only the cut length changes, so the wall light and the pendant sit together in one space and in one production line.",
       "All ten parts were engineered in Rhino, 3D-printed and test-fitted in FDM and TPU, then issued to the mockup vendor with a part-by-part spec sheet — size, quantity and finish for every piece."
     ],
+    chip: "multi-d1.webp",
     cover: "multi-01.webp",
     gallery: [
       ["multi-05.webp"],
@@ -104,6 +107,7 @@ window.PROJECTS = [
       "The brief was a simple straight pendant that still reads as architecture in the room. The answer was a 55 × 70 mm body with light on both faces: 21 W down onto the table, 11 W of warm indirect light up to the ceiling.",
       "The first version was white; the final one moved to satin-plated metal with a horizontal hairline and an engraved wordmark on the end caps, so the hardware carries the industrial character."
     ],
+    chip: "ind-04.webp",
     cover: "ind-01.webp",
     gallery: [
       ["ind-03.webp", "ind-04.webp"],
@@ -127,6 +131,7 @@ window.PROJECTS = [
     body: [
       "Designed to disappear into the table: the light source, arm and legs read as one continuous line, from a home desk to a long communal bar."
     ],
+    chip: "linear-d1.webp",
     cover: "linear-11.webp",
     gallery: [
       ["linear-01.webp", "linear-02.webp"],

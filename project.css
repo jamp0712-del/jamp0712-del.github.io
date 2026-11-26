@@ -259,3 +259,64 @@ body.pp { --bg: #ffffff; --ink: #111111; --mute: #8e8e93; --line: #e6e6e6; --til
   .gx-foot { grid-template-columns: 1fr; gap: 28px; }
 }
 @media (prefers-reduced-motion: reduce) { .gx-badge svg, .gx-mq > div { animation: none; } }
+
+/* ---------- project pages: graphic system (same language as home hero) ---------- */
+.gx-name.fit { font-size: clamp(72px, 17vw, 270px); }
+.gx-p .gx-foot { padding-bottom: 8vh; }
+.gx-p .gx-idx a em { font-size: 12px; }
+.gx-p + .wrap.flush { margin-top: 0; }
+
+/* section label rows */
+.lrow { display: grid; grid-template-columns: repeat(4, 1fr); padding: 14px 0 0; border-top: 1px solid var(--ink); font-size: 12px; line-height: 1.5; color: #6e6e73; margin-bottom: 6vh; }
+.lrow span { padding-right: 12px; }
+.lrow span:first-child { color: var(--ink); font-weight: 600; }
+
+.say { padding-top: 16vh; padding-bottom: 14vh; }
+.say h2 { font-size: clamp(38px, 5.6vw, 92px); letter-spacing: -0.05em; line-height: .98; max-width: 13em; }
+.say .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--gap); margin-top: 7vh; }
+.say .cols p { margin-top: 0; max-width: 520px; }
+.say .cols p.kr { margin-top: 0; }
+
+#vs .vs { margin-bottom: 18vh; }
+.vs .pan .tg { min-height: 0; margin-top: 0; line-height: 1.4; align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; background: #e5e5ea; color: #6e6e73; margin-bottom: 14px; }
+.vs .pan.on .tg { background: #f0a63a; color: #111; }
+.vs .pan.on { background: #111; color: #f2f2f2; }
+.vs .pan.on span { color: #a1a1a6; }
+.vs .pan.on b { color: #fff; }
+.vs .pan.on .vsg .k { stroke: #f2f2f2; }
+.vs .pan.on .vsg .k.f { fill: #1c1c1e; }
+.vs .pan.on .vsg text { fill: #a1a1a6; }
+.vs .pan.on .vsg .tx2 { fill: #fff; }
+
+#dir .dir2 { margin-bottom: 16vh; }
+.dir2 h3 { font-size: clamp(36px, 4.4vw, 72px); font-weight: 800; letter-spacing: -0.05em; line-height: .95; text-transform: uppercase; }
+
+#gal { padding-top: 2vh; }
+#gal .lrow { margin-bottom: 0; padding-bottom: 14px; }
+.note2 { font-size: clamp(20px, 1.8vw, 26px); font-weight: 600; letter-spacing: -0.025em; line-height: 1.4; display: grid; grid-template-columns: 34px 1fr; }
+.note2 i { font-style: normal; color: #f0a63a; }
+
+/* chapter headers: oversized numerals */
+.chap > header { display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 0 22px; padding-bottom: 22px; margin-bottom: 34px; border-bottom: 1px solid var(--ink); }
+.chap.dark > header { border-color: #f2f2f2; }
+.chap .no { font-size: clamp(60px, 7.4vw, 124px); font-weight: 800; letter-spacing: -0.065em; line-height: .76; }
+.chap h3 { font-size: clamp(26px, 2.9vw, 46px); font-weight: 800; letter-spacing: -0.045em; line-height: .95; text-transform: uppercase; }
+.chap .sub { display: block; margin-top: 10px; }
+.chap .tick { font-size: 12px; color: var(--mute); padding-bottom: 4px; }
+
+/* next project */
+.nx-g { display: block; margin-top: 22vh; padding-top: 0; padding-bottom: 4vh; color: var(--ink); }
+.nx-g .gx-top span:last-child { color: var(--ink); font-weight: 600; }
+.nx-g .gx-name { margin-top: 2vh; transition: color .5s var(--ease); }
+.nx-g .chip { transition: width .7s var(--ease); }
+.nx-g:hover .gx-name { color: #f0a63a; }
+.nx-g:hover .chip { width: 2.6em; }
+
+@media (max-width: 820px) {
+  .gx-name.fit { font-size: 24vw; }
+  .lrow { grid-template-columns: 1fr 1fr; row-gap: 6px; }
+  .say .cols { grid-template-columns: 1fr; gap: 18px; }
+  .note2 { grid-template-columns: 26px 1fr; }
+  .chap > header { grid-template-columns: auto 1fr; }
+  .chap .tick { display: none; }
+}

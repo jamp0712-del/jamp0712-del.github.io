@@ -23,64 +23,33 @@
   document.title = `${p.title} — ${cap(SITE.name)}`;
 
   const img = (f, cls = "") => `<div class="ph ${cls}"><img src="img/${f}" alt="${esc(p.title)}" loading="lazy"></div>`;
-  let ch = 0; // 챕터 번호
-  const chap = (title, sub, inner, cls = "") => `
-    <section class="chap ${cls} rv">
-      <header><span class="no">${pad(++ch)}</span><h3>${esc(title)}</h3>${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</header>
+  const N = PROJECTS.length;
+  // 섹션 라벨 줄 (메인 히어로의 인덱스 라벨과 같은 형식)
+  const lab = (...xs) => `<div class="lrow rv">${xs.map(x => `<span>${x}</span>`).join("")}</div>`;
+  // 대형 타이포: 마지막 단어 앞에 이미지 칩
+  const bigType = (q, tag = "h1") => {
+    const w = q.title.split(" "), last = w.pop();
+    return `<${tag} class="gx-name fit" aria-label="${esc(q.title)}">${w.length ? `<span class="l1">${esc(w.join(" "))}</span>` : ""}<span class="l2"><span class="chip"><img src="img/${q.chip || q.cover}" alt=""></span>${esc(last)}</span></${tag}>`;
+  };
+  const twoTone = t => { const w = t.split(" "), h = Math.ceil(w.length / 2); return `<b>${esc(w.slice(0, h).join(" "))}</b> ${esc(w.slice(h).join(" "))}`; };
+  const marquee = words => `<div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(words.map(t => `<span>${esc(t)}</span><i>✳</i>`).join("")).join("")}</div></div>`;
+
+  let ch = 0; const toc = [];
+  const chap = (title, sub, inner, cls = "") => {
+    ch++; toc.push([`c${ch}`, title]);
+    return `
+    <section class="chap ${cls} rv" id="c${ch}">
+      <header><span class="no">${pad(ch)}</span><div><h3>${esc(title)}</h3>${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</div><span class="tick">(${pad(ch)}/{{CH}})</span></header>
       ${inner}
     </section>`;
+  };
 
   // 갤러리: 디렉션 이미지는 중복 제거, 한 줄 1장(꽉) 또는 2장(반반)
   const gal = p.gallery.map(r => r.filter(f => !(d && d.dir && d.dir.img === f))).filter(r => r.length);
   const stack = rows => rows.map(r => `<div class="st ${r.length > 1 ? "two" : ""}">${r.map(f => img(f)).join("")}</div>`).join("");
   const lead = gal.slice(0, 1), more = gal.slice(1);
 
-  // 1. 타이틀
-  const title = `
-    <section class="ttl">
-      <span class="kick rv">${pad(idx + 1)} — ${esc(p.category)}</span>
-      <h1 class="rv">${esc(p.title)}<em>${esc(p.tagline)}</em></h1>
-      <p class="rv">${esc(p.summary)}</p>
-      <dl class="rv">
-        <div><dt>Year</dt><dd>${esc(p.year)}</dd></div>
-        <div><dt>Type</dt><dd>${esc(p.kr)}</dd></div>
-        <div><dt>Client</dt><dd>${esc(p.client)}</dd></div>
-        <div><dt>Role</dt><dd>${esc(p.role)}</dd></div>
-      </dl>
-    </section>`;
-
-  // 2. 히어로 + 첫 이미지
-  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>`;
-
-  // 3. 두 톤 헤드라인 + 개요
-  const headline = v ? v.head : (d && d.q) || [p.tagline, ""];
-  const story = `
-    <section class="wrap say rv">
-      <h2>${esc(headline[0])} <span>${esc(headline[1] || "")}</span></h2>
-      ${d ? `<p>${esc(d.brief)}</p>` : ""}${d && d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}
-    </section>`;
-
-  // 4. 기존 → 새 방식 비교
-  const compare = !v ? "" : `
-    <section class="wrap vs rv">
-      <div class="pan"><b>${esc(v.a[0])}</b><span>${esc(v.a[1])}</span>${v.svg[0]}</div>
-      <div class="arr" aria-hidden="true">→</div>
-      <div class="pan on"><b>${esc(v.b[0])}</b><span>${esc(v.b[1])}</span>${v.svg[1]}</div>
-      <p class="ft2">${esc(v.from)} <i>→</i> <strong>${esc(v.to)}</strong></p>
-    </section>`;
-
-  // 5. 디렉션
-  const dir = !(d && d.dir) ? "" : `
-    <section class="wrap dir2 rv">
-      <div class="tx"><span class="lab">${esc(d.dir.label)}</span><h3>${esc(d.dir.t)}</h3><span class="krs">${esc(d.dir.kr)}</span><p>${esc(d.approach)}</p></div>
-      ${img(d.dir.img)}
-    </section>`;
-
-  // 6. 갤러리 나머지 + 설명 문단
-  const notes = p.body.map(t => `<p class="note2 rv">${esc(t)}</p>`);
-  const gallery = `<section class="wrap flush">${more.map((r, i) => stack([r]) + (i % 2 === 1 && notes.length ? notes.shift() : "")).join("")}</section>${notes.length ? `<section class="wrap">${notes.join("")}</section>` : ""}`;
-
-  // 7. 번호 챕터들
+  // 번호 챕터들
   let chaps = "";
   if (d) {
     chaps += chap("Process", "From brief to final image", `<ol class="proc2">${d.process.map(([s, x, t], i) => `
@@ -102,22 +71,86 @@
       <li><span class="n">${i + 1}</span><b>${esc(n)}${q > 1 ? ` <small>× ${q}</small>` : ""}</b><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
     chaps += chap("Specifications", "", `<dl class="spec2">${d.specs.map(([k, x]) => `<div><dt>${esc(k)}</dt><dd>${esc(x)}</dd></div>`).join("")}</dl>`);
   }
+  chaps = chaps.replace(/\{\{CH\}\}/g, pad(ch));
 
-  // 8. 디테일 클로즈업
+  // 1. 그래픽 히어로 (메인과 같은 구성)
+  const contents = [["story", "Overview"], ...(v ? [["vs", "Problem → idea"]] : []), ...(d && d.dir ? [["dir", "Direction"]] : []), ["gal", "Images"], ...toc];
+  const title = `
+    <section class="gx gx-p">
+      <div class="gx-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="gx-top rv">
+        <span>(Project ${pad(idx + 1)}/${pad(N)})</span><span>${esc(p.category)}<br>${esc(p.kr)}</span><span>${esc(p.year)}<br>${esc(p.client)}</span><span>${esc(p.role)}</span>
+      </div>
+      <div class="gx-type rv">
+        ${bigType(p)}
+        <a class="gx-badge" href="#story" aria-label="Read the project">
+          <svg viewBox="0 0 120 120"><defs><path id="gxc" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
+            <text><textPath href="#gxc">${esc(`${p.category} · ${p.year} · ${pad(idx + 1)}/${pad(N)} · `.toUpperCase())}</textPath></text></svg><b>↓</b></a>
+      </div>
+      <div class="gx-foot rv">
+        <p class="gx-st">${twoTone(p.tagline)}</p>
+        <div class="side">
+          <p>${esc(p.summary)}</p>
+          <ol class="gx-idx">${contents.map(([id, t], i) => `<li><a href="#${id}"><span>${pad(i + 1)}</span>${esc(t)}<em>↓</em></a></li>`).join("")}</ol>
+        </div>
+      </div>
+    </section>`;
+
+  // 2. 히어로 이미지 + 키워드 마키
+  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>${marquee([p.category, ...(d ? d.points.map(x => x[0]) : [p.tagline])])}`;
+
+  // 3. 두 톤 헤드라인 + 개요
+  const headline = v ? v.head : (d && d.q) || [p.tagline, ""];
+  const story = `
+    <section class="wrap say" id="story">
+      ${lab("(Overview)", esc(p.title), esc(p.year), "")}
+      <h2 class="rv">${esc(headline[0])} <span>${esc(headline[1] || "")}</span></h2>
+      <div class="cols rv">${d ? `<p>${esc(d.brief)}</p>` : ""}${d && d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}</div>
+    </section>`;
+
+  // 4. 기존 → 새 방식 비교
+  const compare = !v ? "" : `
+    <section class="wrap" id="vs">
+      ${lab("(Problem → idea)", esc(v.from), "→", esc(v.to))}
+      <div class="vs rv">
+        <div class="pan"><span class="tg">Before</span><b>${esc(v.a[0])}</b><span>${esc(v.a[1])}</span>${v.svg[0]}</div>
+        <div class="arr" aria-hidden="true">→</div>
+        <div class="pan on"><span class="tg">After</span><b>${esc(v.b[0])}</b><span>${esc(v.b[1])}</span>${v.svg[1]}</div>
+      </div>
+    </section>`;
+
+  // 5. 디렉션
+  const dir = !(d && d.dir) ? "" : `
+    <section class="wrap" id="dir">
+      ${lab("(Direction)", esc(d.dir.label), esc(d.dir.kr), "")}
+      <div class="dir2 rv">
+        <div class="tx"><h3>${esc(d.dir.t)}</h3><span class="krs">${esc(d.dir.kr)}</span><p>${esc(d.approach)}</p></div>
+        ${img(d.dir.img)}
+      </div>
+    </section>`;
+
+  // 6. 갤러리 나머지 + 설명 문단
+  const notes = p.body.map(t => `<p class="note2 rv"><i>✳</i>${esc(t)}</p>`);
+  const gallery = `<section class="wrap" id="gal">${lab("(Images)", `${pad(gal.length)} views`, "", "")}</section><section class="wrap flush">${more.map((r, i) => stack([r]) + (i % 2 === 1 && notes.length ? notes.shift() : "")).join("")}</section>${notes.length ? `<section class="wrap">${notes.join("")}</section>` : ""}`;
+
+  // 7. 디테일 클로즈업
   const close = !(v && v.close.length) ? "" : `<section class="wrap flush close">${v.close.map(f => img(f)).join("")}</section>`;
 
-  app.innerHTML = `${title}${hero}${story}${compare}${dir}${gallery}${close}<div class="chaps">${chaps}</div>
-    <a class="next2 rv" href="project.html?p=${nx.slug}">
-      <span>Next project</span>
-      <div class="t">${esc(nx.title)} <em>${esc(nx.tagline)}</em></div>
-      ${img(nx.cover)}
-    </a>
+  // 8. 다음 프로젝트 (대형 타이포)
+  const next = `
+    <a class="gx nx-g" href="project.html?p=${nx.slug}">
+      <div class="gx-top"><span>(Next project)</span><span>${pad((idx + 1) % N + 1)}/${pad(N)}</span><span>${esc(nx.category)}</span><span>View project →</span></div>
+      ${bigType(nx, "div")}
+    </a>`;
+
+  app.innerHTML = `${title}${hero}${story}${compare}${dir}${gallery}${close}<div class="chaps">${chaps}</div>${next}
     <footer class="ft"><span>© ${new Date().getFullYear()} ${esc(cap(SITE.name))}</span><a class="ul" href="index.html">All work</a></footer>`;
+  fitType();
   header();
   reveal(); fadeImgs();
 
   // lightbox
-  const shots = [...document.querySelectorAll("#app .ph:not(.no-lb) img")].filter(im => !im.closest(".next2"));
+  const shots = [...document.querySelectorAll("#app .ph:not(.no-lb) img")].filter(im => !im.closest(".nx-g, .gx"));
   document.body.insertAdjacentHTML("beforeend", `
     <div class="lb" role="dialog" aria-modal="true" aria-label="Image viewer"><img alt="">
       <div class="bar"><span class="mono ct"></span><div class="nav2"><button class="pv">Prev</button><button class="nx">Next</button><button class="x">Close</button></div></div>

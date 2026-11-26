@@ -54,3 +54,17 @@ document.addEventListener("click", e => { // page fade
   setTimeout(() => (location.href = href), 280);
 });
 addEventListener("pageshow", () => document.body.classList.remove("out"));
+
+/* 대형 타이포를 컨테이너 폭에 맞춤 (.gx-name.fit) */
+function fitType() {
+  const run = () => document.querySelectorAll(".gx-name.fit").forEach(h => {
+    h.style.fontSize = "";
+    const W = h.clientWidth, base = parseFloat(getComputedStyle(h).fontSize);
+    let max = 0;
+    h.querySelectorAll(":scope > span").forEach(s => { s.style.width = "max-content"; max = Math.max(max, s.getBoundingClientRect().width); s.style.width = ""; });
+    if (max > W) h.style.fontSize = (base * W / max * 0.97) + "px";
+  });
+  run();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(run, 120); });
+}

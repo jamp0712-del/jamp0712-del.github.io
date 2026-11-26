@@ -92,8 +92,9 @@
     if (d.real) {
       let rn = 0;
       const shots = d.real.rows.flatMap(([, fs]) => fs);
-      chaps += chap("Mockup & test", d.real.krk || "", `<p class="intro2">${esc(d.real.lead)}</p><div class="mock n${Math.min(shots.length, 4)}">${shots.map(([f, en, kr]) => `
-        <figure>${img(f)}<figcaption><b>${++rn}. ${esc(en)}</b>${esc(kr || "")}</figcaption></figure>`).join("")}</div>`, "dark");
+      const cls = d.real.studio ? "studio" : `n${Math.min(shots.length, 4)}`;
+      chaps += chap(d.real.chap || "Mockup & test", d.real.krk || "", `<p class="intro2">${esc(d.real.lead)}</p><div class="mock ${cls}">${shots.map(([f, en, kr]) => `
+        <figure>${img(f)}<figcaption><b>${d.real.studio ? "" : `${++rn}. `}${esc(en)}</b>${esc(kr || "")}</figcaption></figure>`).join("")}</div>`, "dark");
     }
     chaps += chap(d.cmfTitle || "Color, material, finish", "", `<ul class="cmf2">${d.cmf.map(([n, x, bg]) => `
       <li><div class="sw" style="background:${bg}"></div><b>${esc(n)}</b><span>${esc(x)}</span></li>`).join("")}</ul>`);

@@ -29,18 +29,30 @@
   for (let i = 1; i < P.length; i += 2) work += `<div class="pair">${P.slice(i, i + 2).map((p, k) => card(p, i + k)).join("")}</div>`;
 
   app.innerHTML = `
-    <section class="ttl hero-t">
-      <span class="kick rv">${esc(S.role)} — Seoul</span>
-      <h1 class="rv">${esc(cap(S.name))}<em>Sketch to part, mockup to image.</em></h1>
-      <p class="rv">${esc(S.statement)}</p>
-      <p class="kr rv">${esc(S.statementKr)}</p>
-      <dl class="rv">
-        <div><dt>Focus</dt><dd>Lighting · Product</dd></div>
-        <div><dt>Projects</dt><dd>${P.length} selected, ${P[0].year}</dd></div>
-        <div><dt>Tools</dt><dd>Rhino · KeyShot · AI</dd></div>
-        <div><dt>Contact</dt><dd><a class="ul" href="mailto:${esc(S.email)}">${esc(S.email)}</a></dd></div>
-      </dl>
+    <section class="gx">
+      <div class="gx-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="gx-top rv">
+        <span>(Portfolio)</span><span>2025 — 2026</span><span>${esc(S.role)}<br>Seoul, KR</span><span>Index 01—${pad(P.length)}</span>
+      </div>
+      <div class="gx-type">
+      <h1 class="gx-name rv" aria-label="${esc(cap(S.name))}">
+        <span class="l1">Hojun</span>
+        <span class="l2"><span class="chip"><img src="img/flos-d2.webp" alt=""></span>Yu<sup>®</sup></span>
+      </h1>
+      <a class="gx-badge" href="#work" aria-label="See work">
+        <svg viewBox="0 0 120 120"><defs><path id="gxc" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
+          <text><textPath href="#gxc">LIGHTING · PRODUCT · MOCKUP · RENDERING · </textPath></text></svg><b>↓</b></a>
+      </div>
+      <div class="gx-foot rv">
+        <p class="gx-st"><b>Sketch to part,</b> mockup to image.</p>
+        <div class="side">
+          <p>${esc(S.statement)}</p>
+          <p class="kr">${esc(S.statementKr)}</p>
+          <ol class="gx-idx">${P.map((p, i) => `<li><a href="project.html?p=${p.slug}"><span>${pad(i + 1)}</span>${esc(p.title)}<em>${esc(p.category)}</em></a></li>`).join("")}</ol>
+        </div>
+      </div>
     </section>
+    <div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(["Product Design", "3D Engineering", "Mockup", "Rendering", "AI-assisted Design", "Lighting"].map(t => `<span>${t}</span><i>✳</i>`).join("")).join("")}</div></div>
 
     <section class="wrap work2" id="work">
       <h2 class="lbl rv">Selected work <span>${pad(P.length)}</span></h2>

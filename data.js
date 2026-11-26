@@ -1,10 +1,10 @@
-// 포트폴리오 내용은 전부 여기서 수정하면 됩니다.
+// 포트폴리오 내용은 전부 여기서 수정.
 // gallery: 한 줄에 이미지 1장(크게) 또는 2장(반반)
 window.SITE = {
   name: "HOJUN YU",
   role: "Industrial Designer",
   statement: "One designer, the whole process — from the first sketch to engineered parts, 3D-printed mockups and the final image.",
-  statementKr: "스케치부터 설계, 3D 프린팅 목업, 렌더링까지. 제품이 만들어지는 전 과정을 혼자서 끝까지 끌고 갑니다.",
+  statementKr: "스케치, 설계, 3D 프린팅 목업, 렌더링까지. 제품이 만들어지는 전 과정을 한 사람이 끝까지 책임진다.",
   email: "jamp0712@naver.com",
   instagram: "",
   behance: "",
@@ -42,10 +42,9 @@ window.PROJECTS = [
     cover: "flos-24.webp",
     gallery: [
       ["flos-01.webp"],
-      ["flos-03.webp", "flos-06.webp"],
-      ["flos-07.webp", "flos-08.webp"],
+            ["flos-07.webp", "flos-08.webp"],
       ["flos-16.webp"],
-      ["flos-12.webp", "flos-10.webp"],
+      ["flos-10.webp"],
       ["flos-14.webp"],
       ["flos-22.webp"]
     ]
@@ -86,8 +85,32 @@ window.PROJECTS = [
     ],
     cover: "multi-01.webp",
     gallery: [
-      ["multi-05.webp", "multi-06.webp"],
+      ["multi-05.webp"],
       ["multi-08.webp"]
+    ]
+  },
+  {
+    slug: "industrial-pendant",
+    theme: "light",
+    tagline: "An architectural line, lit both ways.",
+    title: "Industrial Pendant",
+    kr: "인더스트리얼 라인 펜던트 · Lumen Line",
+    category: "Pendant Light",
+    year: "2025",
+    role: "Design · Engineering · Mockup · Rendering",
+    client: "Product Development Team — mockup project 02",
+    summary: "Lumen Line — a straight dining pendant with an architectural edge. A slim aluminum body lights the table and washes the ceiling at the same time, held by satin-plated end caps, flange and wire adjuster.",
+    body: [
+      "The brief was a simple straight pendant that still reads as architecture in the room. The answer was a 55 × 70 mm body with light on both faces: 21 W down onto the table, 11 W of warm indirect light up to the ceiling.",
+      "The first version was white; the final one moved to satin-plated metal with a horizontal hairline and an engraved wordmark on the end caps, so the hardware carries the industrial character."
+    ],
+    cover: "ind-01.webp",
+    gallery: [
+      ["ind-03.webp", "ind-04.webp"],
+      ["ind-02.webp"],
+      ["ind-07.webp"],
+      ["ind-05.webp", "ind-06.webp"],
+      ["multi-06.webp"]
     ]
   },
   {
@@ -108,29 +131,6 @@ window.PROJECTS = [
     gallery: [
       ["linear-01.webp", "linear-02.webp"],
       ["linear-09.webp"]
-    ]
-  },
-  {
-    slug: "cove-studies",
-    theme: "light",
-    tagline: "Light you feel, not see.",
-    title: "Cove Lighting Studies",
-    kr: "천장 간접조명 스터디",
-    category: "Spatial Lighting",
-    year: "2026",
-    role: "Lighting Planning · Visualization",
-    client: "Study",
-    summary: "Residential scenes comparing indirect ceiling coves, color temperatures and fixture combinations.",
-    body: [
-      "Each room was rendered under several setups — cove only, cove with ceiling fixtures, warm and neutral white, day and night — to see how indirect light changes the scale and mood of the same space."
-    ],
-    cover: "cove-01.webp",
-    gallery: [
-      ["cove-02.webp", "cove-04.webp"],
-      ["cove-10.webp"],
-      ["cove-12.webp"],
-      ["cove-16.webp", "cove-17.webp"],
-      ["cove-20.webp", "cove-21.webp"]
     ]
   }
 ];

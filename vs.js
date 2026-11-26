@@ -32,16 +32,20 @@
 
   const V = {
     flos: { head: ["Let the edge", "carry the light."], a: ["Conventional panel", "A flat white panel stuck to the ceiling. The edge is dead; all the light goes straight down."], b: ["FLOS", "Clear PC tiers step around an edge-lit panel. Every tier catches a little stray light, so the outline glows like layered glass."], from: "Flat panel", to: "Layered edge",
-      close: ["flos-d1.webp", "flos-d3.webp", "flos-d2.webp"] },
+      close: ["flos-d2.webp"] },
     "multi-lighting": { head: ["Let one die", "make the whole family."], a: ["One light, one tool", "Every room needs its own light, and every light its own extrusion and injection tools. Small volumes never pay them back."], b: ["Multi Lighting", "One 27.6 × 70.4 mm extrusion is cut to length and combined with wings, end caps and a diffuser — a wall light and a pendant from the same die."], from: "Tool per product", to: "One die, many products",
-      close: ["multi-d1.webp", "multi-d2.webp"] },
+      close: ["multi-d1.webp"] },
     "linear-desk": { head: ["Take the lamp head", "off the table."], a: ["Desk lamp", "A lamp head stands between the people across the table and lights only one spot."], b: ["Linear Table Light", "A slim bar bends into its legs in one stroke and spreads light evenly along the whole table."], from: "Point light", to: "Line of light",
       close: ["linear-d1.webp", "linear-d2.webp"] },
     "clear-sconce": { head: ["Let the material", "carry the light."], a: ["Shaded box", "A closed shade hides the source; the wall around it stays flat."], b: ["Clear Wall Sconce", "Two curled acrylic blades guide light through their thickness, glow at the edge and wash the wall above and below."], from: "Shade", to: "Light guide",
-      close: ["sconce-d1.webp", "sconce-d2.webp"] },
-    "cove-studies": { head: ["See the light", "before the ceiling is built."], a: ["Build, then see", "Residents only learn how the cove feels after the ceiling is finished — too late to change it."], b: ["Cove Lighting Studies", "Each room is modeled once and rendered under many setups, so depth, colour temperature and fixtures are chosen from images."], from: "Guess", to: "Compare and choose",
-      close: [] }
+      close: ["sconce-d1.webp", "sconce-d2.webp"] }
   };
+  V["industrial-pendant"] = { head: ["Light the table", "and the ceiling."], a: ["Plain linear pendant", "A bar that lights only the table. The ceiling above goes dark and the room feels lower."], b: ["Lumen Line", "21 W down onto the table, 11 W warm indirect light up to the ceiling, finished with satin-plated metal hardware."], from: "Down only", to: "Up + down",
+    close: ["multi-d2.webp"] };
+  G["industrial-pendant"] = [
+    S(`${ceil}<line x1="180" y1="40" x2="180" y2="96" class="t"/><rect x="90" y="96" width="180" height="12" class="k f"/>${rays(100, 260, 114, 7, 56)}<text x="180" y="200" class="tx1">ceiling left in the dark</text>`),
+    S(`${ceil}<line x1="160" y1="40" x2="110" y2="96" class="t"/><line x1="200" y1="40" x2="250" y2="96" class="t"/><rect x="90" y="96" width="180" height="12" class="k f"/><rect x="84" y="96" width="8" height="12" class="k f"/><rect x="268" y="96" width="8" height="12" class="k f"/><line x1="96" y1="96" x2="264" y2="96" class="a"/><line x1="96" y1="108" x2="264" y2="108" class="a"/>${rays(100, 260, 114, 7, 56)}<path d="M110 92 q-20 -30 -40 -44 M250 92 q20 -30 40 -44 M180 92 v-40" class="r"/><text x="180" y="200" class="tx1">21 W down · 11 W up</text>`)
+  ];
   for (const k in V) V[k].svg = G[k];
   window.VS = V;
 })();

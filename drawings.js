@@ -263,6 +263,64 @@
         ${co(161, 90, 214, 76, 4)}${co(222, 150, 244, 120, 5)}
         ${dimV(130, 154, 244, "≤ 40", 226)}`)
     },
+    "industrial-pendant": {
+      // 실제 스펙: 몸체 L1050 × D55 × H70, 앤드캡 H70.4 × W54.6 × D30, 후렌지 L400 × W40 × H36.8, 와이어 조절부 L300 × H12
+      elev: () => svg("0 0 620 300", `
+        <rect x="20" y="14" width="580" height="10" fill="HATCH"/><line class="l" x1="20" y1="24" x2="600" y2="24"/>
+        <rect class="l" style="fill:METAL" x="210" y="24" width="200" height="18.4"/>
+        <line class="l thin" x1="250" y1="42" x2="250" y2="120"/><line class="l thin" x1="370" y1="42" x2="370" y2="120"/>
+        <rect class="l" style="fill:METAL" x="235" y="120" width="150" height="6"/>
+        <line class="l thin" x1="240" y1="126" x2="62" y2="205"/><line class="l thin" x1="380" y1="126" x2="558" y2="205"/>
+        <rect class="l" x="45" y="205" width="530" height="35"/>
+        <rect class="l" style="fill:METAL" x="45" y="205" width="15" height="35.2"/><rect class="l" style="fill:METAL" x="560" y="205" width="15" height="35.2"/>
+        <rect class="glow" x="62" y="238" width="496" height="2"/><rect class="glow" x="62" y="205" width="496" height="1.6"/>
+        ${ray(150, 205, 140, 185)}${ray(310, 205, 310, 182)}${ray(470, 205, 480, 185)}
+        ${ray(150, 241, 140, 272)}${ray(310, 241, 310, 278)}${ray(470, 241, 480, 272)}
+        ${note(310, 198, "INDIRECT 11 W · 2700 K", "middle")}${note(310, 290, "MAIN 21 W · 2700–6500 K", "middle")}
+        ${dimH(45, 575, 262, "1050", 240)}${dimH(210, 410, 58, "400 (FLANGE)", 42)}${dimH(235, 385, 110, "300", 120)}
+        ${dimV(205, 240, 600, "70", 575)}
+        ${co(300, 33, 300, 8, 1)}${co(330, 123, 420, 100, 2)}${co(150, 166, 120, 150, 3)}${co(52, 222, 24, 222, 6)}${co(200, 222, 200, 278, 7)}`),
+      section: () => svg("0 0 300 300", `
+        <line class="cl" x1="150" y1="20" x2="150" y2="280"/>
+        <path class="l" style="fill:METAL" d="M68 45 H232 V255 H68 Z M78 70 V230 H222 V70 Z"/>
+        <rect class="l acr" x="78" y="45" width="144" height="12"/>
+        <rect class="l acr" x="78" y="243" width="144" height="12"/>
+        <rect class="l pcb" x="98" y="72" width="104" height="6"/><rect class="l pcb" x="98" y="222" width="104" height="6"/>
+        <rect class="glow" x="110" y="78" width="80" height="3"/><rect class="glow" x="110" y="219" width="80" height="3"/>
+        <rect class="l thin" x="86" y="120" width="128" height="60" style="fill:var(--bg)"/>${note(150, 154, "DRIVER BAY", "middle")}
+        ${ray(120, 45, 100, 22)}${ray(150, 45, 150, 18)}${ray(180, 45, 200, 22)}
+        ${ray(120, 255, 100, 282)}${ray(150, 255, 150, 286)}${ray(180, 255, 200, 282)}
+        ${dimH(68, 232, 292, "55", 255)}${dimV(45, 255, 262, "70", 232)}
+        ${co(160, 50, 270, 40, 8)}${co(160, 75, 270, 80, 4)}${co(225, 140, 270, 140, 7)}${co(160, 250, 270, 252, 8)}`),
+      endcap: () => svg("0 0 300 300", `
+        <rect class="l" style="fill:METAL" x="40" y="60" width="109.2" height="140.8" rx="6"/>
+        ${Array.from({ length: 11 }, (_, i) => `<line class="l thin" x1="46" y1="${72 + i * 12}" x2="143" y2="${72 + i * 12}"/>`).join("")}
+        <text x="94.6" y="134" text-anchor="middle" class="note">LUMEN LINE</text>
+        <rect class="l" style="fill:METAL" x="190" y="60" width="60" height="140.8" rx="4"/>
+        <line class="l thin" x1="205" y1="60" x2="205" y2="200.8"/>
+        ${dimH(40, 149.2, 228, "54.6", 200.8)}${dimV(60, 200.8, 22, "70.4", 40)}${dimH(190, 250, 228, "30", 200.8)}
+        ${note(94.6, 262, "FRONT · SATIN HAIRLINE (H)", "middle")}${note(220, 262, "SIDE", "middle")}
+        ${note(94.6, 278, "ENGRAVED WORDMARK", "middle")}`),
+      options: () => svg("0 0 620 200", [0, 1, 2].map(i => { const x = 20 + i * 205;
+        const flange = i === 0 ? `<rect class="l" style="fill:METAL" x="${x + 8}" y="30" width="24" height="8"/><rect class="l" style="fill:METAL" x="${x + 148}" y="30" width="24" height="8"/><line class="l thin" x1="${x + 20}" y1="38" x2="${x + 20}" y2="120"/><line class="l thin" x1="${x + 160}" y1="38" x2="${x + 160}" y2="120"/>`
+          : `<rect class="l" style="fill:METAL" x="${x + 50}" y="30" width="80" height="8"/><line class="l thin" x1="${x + 70}" y1="38" x2="${x + 70}" y2="70"/><line class="l thin" x1="${x + 110}" y1="38" x2="${x + 110}" y2="70"/><rect class="l" x="${x + 60}" y="70" width="60" height="3"/><line class="l thin" x1="${x + 62}" y1="73" x2="${x + 12}" y2="120"/><line class="l thin" x1="${x + 118}" y1="73" x2="${x + 168}" y2="120"/>`;
+        const caps = i === 2 ? `<path class="l" style="fill:METAL" d="M${x} 120 h10 v14 h-10 q-4 -7 0 -14z M${x + 180} 120 h-10 v14 h10 q4 -7 0 -14z"/>` : `<rect class="l" style="fill:METAL" x="${x}" y="120" width="8" height="14"/><rect class="l" style="fill:METAL" x="${x + 172}" y="120" width="8" height="14"/>`;
+        return `<line class="l" x1="${x}" y1="24" x2="${x + 180}" y2="24"/>${flange}<rect class="l" x="${x}" y="120" width="180" height="14"/>${caps}
+          <text x="${x + 90}" y="166" text-anchor="middle" class="note">${["1. BOTH ENDS", "2. CENTER", "3. CENTER + NEW END CAP"][i]}</text>
+          ${i === 2 ? `<text x="${x + 90}" y="182" text-anchor="middle" class="note">SELECTED</text>` : ""}`; }).join("")),
+      exploded: () => svg("0 0 520 420", `
+        <rect class="l" style="fill:METAL" x="200" y="20" width="120" height="14"/>${co(320, 27, 480, 27, 1)}
+        <rect class="l" style="fill:METAL" x="215" y="70" width="90" height="6"/>${co(305, 73, 480, 73, 2)}
+        <line class="l thin" x1="230" y1="34" x2="230" y2="70"/><line class="l thin" x1="290" y1="34" x2="290" y2="70"/><line class="l thin" x1="220" y1="76" x2="120" y2="120"/>${co(170, 98, 480, 110, 3)}
+        <rect class="l acr" x="70" y="150" width="380" height="10"/>${co(440, 155, 480, 155, 8)}
+        <rect class="l pcb" x="90" y="190" width="340" height="6"/>${co(420, 193, 480, 193, 4)}
+        <path class="l" style="fill:METAL" d="M60 230 H460 V290 H60 Z M70 240 V280 H450 V240 Z"/>${co(455, 260, 480, 240, 7)}
+        <rect class="l thin" x="60" y="300" width="400" height="6"/>${co(440, 303, 480, 290, 5)}
+        <rect class="l pcb" x="90" y="330" width="340" height="6"/>
+        <rect class="l acr" x="70" y="360" width="380" height="10"/>
+        <rect class="l" style="fill:METAL" x="14" y="228" width="30" height="64" rx="3"/><rect class="l" style="fill:METAL" x="476" y="228" width="30" height="64" rx="3"/>${co(29, 296, 29, 330, 6)}
+        ${[150, 190, 300, 330, 360].map(y => `<line class="cl" x1="260" y1="${y - 8}" x2="260" y2="${y}"/>`).join("")}`)
+    },
     "cove-studies": {
       cove: () => svg("0 0 420 240", `
         <rect x="20" y="20" width="380" height="18" fill="HATCH"/><line class="l" x1="20" y1="38" x2="400" y2="38"/>

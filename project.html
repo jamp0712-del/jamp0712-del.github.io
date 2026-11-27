@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Project — Hojun Yu</title>
-<link rel="stylesheet" href="style.css?v=1127c">
-<link rel="stylesheet" href="project.css?v=1127c">
+<link rel="stylesheet" href="style.css?v=1127d">
+<link rel="stylesheet" href="project.css?v=1127d">
 </head>
 <body class="pp">
 <main id="app"></main>
-<script src="data.js?v=1127c"></script>
-<script src="details.js?v=1127c"></script>
-<script src="drawings.js?v=1127c"></script>
-<script src="vs.js?v=1127c"></script>
-<script src="kr.js?v=1127c"></script>
-<script src="common.js?v=1127c"></script>
+<script src="data.js?v=1127d"></script>
+<script src="details.js?v=1127d"></script>
+<script src="drawings.js?v=1127e"></script>
+<script src="vs.js?v=1127d"></script>
+<script src="kr.js?v=1127d"></script>
+<script src="common.js?v=1127d"></script>
 <script>
   const slug = new URLSearchParams(location.search).get("p");
   const idx = Math.max(0, PROJECTS.findIndex(p => p.slug === slug));
@@ -37,12 +37,13 @@
     return `<${tag} class="gx-name fit" aria-label="${esc(q.title)}">${w.length ? `<span class="l1">${esc(w.join(" "))}</span>` : ""}<span class="l2"><span class="chip"><img src="img/${q.chip || q.cover}" alt=""></span>${esc(last)}</span></${tag}>`;
   };
   const twoTone = t => { const w = t.split(" "), h = Math.ceil(w.length / 2); return `<b>${esc(w.slice(0, h).join(" "))}</b> ${esc(w.slice(h).join(" "))}`; };
-  // 띠 그래픽: 영어만
-  const marquee = words => `<div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(words.map(t => `<span>${esc(t)}</span><i>✳</i>`).join("")).join("")}</div></div>`;
+  // 섹션 순서는 프로젝트마다 details.js의 order로 정한다. 스터디는 짧게.
+  const order = (d && d.order) || ["story", "vs", "dir", "gal", "close", "points", "dwg", "real", "cmf", "asm", "process", "specs"];
+  const has = k => order.includes(k);
 
-  let ch = 0; const toc = [];
+  let ch = 0;
   const chap = (title, sub, inner, cls = "", kOver) => {
-    ch++; const [kt, ks] = kOver || KU.chap[title] || []; toc.push([`c${ch}`, title, kt]);
+    ch++; const [kt, ks] = kOver || KU.chap[title] || [];
     return `
     <section class="chap ${cls} rv" id="c${ch}">
       <header><span class="no">${pad(ch)}</span><div><h3>${esc(title)}${kt ? ` <i>${esc(kt)}</i>` : ""}</h3>${sub ? `<span class="sub">${esc(sub)}</span>` : ""}${ks ? `<span class="sk">${esc(ks)}</span>` : ""}</div><span class="tick">(${pad(ch)}/{{CH}})</span></header>
@@ -50,73 +51,39 @@
     </section>`;
   };
 
-  // 갤러리: 디렉션 이미지는 중복 제거, 한 줄 1장(꽉) 또는 2장(반반)
-  const gal = p.gallery.map(r => r.filter(f => !(d && d.dir && d.dir.img === f))).filter(r => r.length);
+  // 갤러리: 디렉션을 보여줄 때만 그 이미지를 갤러리에서 뺀다. 한 줄 1장(꽉) 또는 2장(반반)
+  const dirOn = has("dir") && d && d.dir;
+  const gal = p.gallery.map(r => r.filter(f => !(dirOn && d.dir.img === f))).filter(r => r.length);
   const stack = rows => rows.map(r => `<div class="st ${r.length > 1 ? "two" : ""}">${r.map(f => img(f)).join("")}</div>`).join("");
   const lead = gal.slice(0, 1), more = gal.slice(1);
 
-  // 번호 챕터들
-  let chaps = "";
-  if (d) {
-    chaps += chap("Process", "From brief to final image", `<ol class="proc2">${d.process.map(([s, x, t], i) => { const [ks, kx] = kAt(K.process, i); return `
-      <li><span class="n">${String.fromCharCode(65 + i)}</span><b>${esc(s)}${ks && ks !== s ? ` <i>${esc(ks)}</i>` : ""}</b><p>${esc(x)}</p>${kP(kx)}<span class="tool">${esc(t)}</span></li>`; }).join("")}</ol>`);
-    chaps += chap("Design points", "What the form has to do", `<ol class="pts2">${d.points.map(([t, x], i) => { const [kt, kx] = kAt(K.points, i); return `
-      <li><span class="n">${i + 1}.</span><h4>${esc(t)}</h4>${kt ? `<span class="hk">${esc(kt)}</span>` : ""}<p>${esc(x)}</p>${kP(kx)}</li>`; }).join("")}</ol>`);
-    chaps += chap("Technical drawings", `${d.dwg} · Scale ${d.scale} · mm`, `<div class="dw2"><div class="figs">${d.figs.map(([k, name, span], i) => `
-      <figure style="--s:${span}">${drawing(p.slug, k)}<figcaption><b>Fig. ${pad(i + 1)}</b>${esc(name)}</figcaption></figure>`).join("")}</div></div>`);
-    if (d.real) {
-      let rn = 0;
-      const shots = d.real.rows.flatMap(([, fs]) => fs);
-      const cls = d.real.studio ? "studio" : `n${Math.min(shots.length, 4)}`;
-      const rt = d.real.chap || "Mockup & test";
-      chaps += chap(rt, d.real.studio ? "Made by hand" : "Full size, lit", `<p class="intro2">${esc(d.real.lead)}</p>${K.lead ? `<p class="intro2 k">${esc(K.lead)}</p>` : ""}<div class="mock ${cls}">${shots.map(([f, en, kr]) => `
-        <figure>${img(f)}<figcaption><b>${d.real.studio ? "" : `${++rn}. `}${esc(en)}</b>${esc(kr || "")}</figcaption></figure>`).join("")}</div>`, "dark", [(KU.chap[rt] || [])[0], d.real.krk]);
-    }
-    chaps += chap(d.cmfTitle || "Color, material, finish", "", `<ul class="cmf2">${d.cmf.map(([n, x, bg], i) => { const [kn, kx] = kAt(K.cmf, i); return `
-      <li><div class="sw" style="background:${bg}"></div><b>${esc(n)}</b>${kn && kn !== n ? `<i class="kn">${esc(kn)}</i>` : ""}<span>${esc(x)}</span>${kx ? `<span class="k">${esc(kx)}</span>` : ""}</li>`; }).join("")}</ul>`);
-    chaps += chap("Assembly", "Parts and finishes", `${d.asm ? `<div class="asm2">${drawing(p.slug, d.asm)}</div>` : ""}<ol class="parts2">${d.parts.map(([n, m, sz, q], i) => `
-      <li><span class="n">${i + 1}</span><b>${esc(n)}${(K.parts || [])[i] && K.parts[i] !== n ? ` <span class="pk">${esc(K.parts[i])}</span>` : ""}${q > 1 ? ` <small>× ${q}</small>` : ""}</b><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
-    chaps += chap("Specifications", "", `<dl class="spec2">${d.specs.map(([k, x], i) => `<div><dt>${esc(k)}${(K.specs || [])[i] && K.specs[i] !== k ? `<span>${esc(K.specs[i])}</span>` : ""}</dt><dd>${esc(x)}</dd></div>`).join("")}</dl>`);
-  }
-  chaps = chaps.replace(/\{\{CH\}\}/g, pad(ch));
-
-  // 1. 그래픽 히어로 (메인과 같은 구성)
-  const contents = [["story", "Overview", KU.story], ...(v ? [["vs", "Problem → idea", KU.vs]] : []), ...(d && d.dir ? [["dir", "Direction", KU.dir]] : []), ["gal", "Images", KU.gal], ...toc];
+  // 1. 히어로: 라벨 줄 + 제목 + 한 줄 소개 (장식은 덜고 제품 이미지가 바로 보이게)
   const title = `
     <section class="gx gx-p">
       <div class="gx-lines" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="gx-top rv">
-        <span>(Project ${pad(idx + 1)}/${pad(N)})</span><span>${esc(p.category)}<br>${esc(p.kr)}</span><span>${esc(p.year)}<br>${esc(p.client)}</span><span>${esc(p.role)}</span>
+        <span>(${p.study ? "Study" : "Case study"} · ${pad(idx + 1)}/${pad(N)})</span><span>${esc(p.category)}<br>${esc(p.kr)}</span><span>${esc(p.year)}<br>${esc(p.client)}</span><span>${esc(p.role)}</span>
       </div>
-      <div class="gx-type rv">
-        ${bigType(p)}
-        <a class="gx-badge" href="#story" aria-label="Read the project">
-          <svg viewBox="0 0 120 120"><defs><path id="gxc" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
-            <text><textPath href="#gxc">${esc(`${p.category} · ${p.year} · ${pad(idx + 1)}/${pad(N)} · `.toUpperCase())}</textPath></text></svg><b>↓</b></a>
-      </div>
+      <div class="gx-type rv">${bigType(p)}</div>
       <div class="gx-foot rv">
         <div><p class="gx-st">${twoTone(p.tagline)}</p>${K.tagline ? `<p class="st-kr">${esc(K.tagline)}</p>` : ""}</div>
-        <div class="side">
-          <p>${esc(p.summary)}</p>
-          <ol class="gx-idx">${contents.map(([id, t, k], i) => `<li><a href="#${id}"><span>${pad(i + 1)}</span><b>${esc(t)}</b><em>↓</em></a></li>`).join("")}</ol>
-        </div>
+        <div class="side"><p>${esc(p.summary)}</p></div>
       </div>
     </section>`;
 
-  // 2. 히어로 이미지 + 키워드 마키
-  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>${marquee([p.category, ...(d ? d.points.map(x => x[0]) : [p.tagline])])}`;
+  // 2. 대표 이미지
+  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>`;
 
-  // 3. 두 톤 헤드라인 + 개요
+  // 열린 섹션들
   const headline = v ? v.head : (d && d.q) || [p.tagline, ""];
-  const story = `
+  const O = {};
+  O.story = `
     <section class="wrap say" id="story">
       ${lab(`(Overview) <i>${KU.story}</i>`, esc(p.title), esc(p.year), esc(p.kr))}
       <h2 class="rv">${esc(headline[0])} <span>${esc(headline[1] || "")}</span></h2>
       <div class="cols rv">${d ? `<p>${esc(d.brief)}</p>` : ""}${d && d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}</div>
     </section>`;
-
-  // 4. 기존 → 새 방식 비교
-  const compare = !v ? "" : `
+  O.vs = !v ? "" : `
     <section class="wrap" id="vs">
       ${lab(`(Problem → idea) <i>${KU.vs}</i>`, esc(v.from), "→", esc(v.to))}
       <div class="vs rv">
@@ -125,9 +92,7 @@
         <div class="pan on"><span class="tg">After</span><b>${esc(v.b[0])}</b>${K.b && K.b[0] !== v.b[0] ? `<em class="kt">${esc(K.b[0])}</em>` : ""}<span>${esc(v.b[1])}</span>${kP(K.b && K.b[1])}${v.svg[1]}</div>
       </div>
     </section>`;
-
-  // 5. 디렉션
-  const dir = !(d && d.dir) ? "" : `
+  O.dir = !dirOn ? "" : `
     <section class="wrap" id="dir">
       ${lab(`(Direction) <i>${KU.dir}</i>`, esc(d.dir.label), esc(d.dir.kr), "")}
       <div class="dir2 rv">
@@ -135,22 +100,52 @@
         ${img(d.dir.img)}
       </div>
     </section>`;
-
-  // 6. 갤러리 나머지 + 설명 문단
   const notes = p.body.map((t, i) => `<p class="note2 rv"><i>✳</i><span>${esc(t)}${(K.body || [])[i] ? `<span class="k">${esc(K.body[i])}</span>` : ""}</span></p>`);
-  const gallery = `<section class="wrap" id="gal">${lab(`(Images) <i>${KU.gal}</i>`, `${pad(gal.length)} views`, "", "")}</section><section class="wrap flush">${more.map((r, i) => stack([r]) + (i % 2 === 1 && notes.length ? notes.shift() : "")).join("")}</section>${notes.length ? `<section class="wrap">${notes.join("")}</section>` : ""}`;
+  O.gal = `<section class="wrap" id="gal">${lab(`(Images) <i>${KU.gal}</i>`, `${pad(gal.length)} views`, "", "")}</section><section class="wrap flush">${more.map((r, i) => stack([r]) + (i % 2 === 1 && notes.length ? notes.shift() : "")).join("")}</section>${notes.length ? `<section class="wrap">${notes.join("")}</section>` : ""}`;
+  O.close = !(v && v.close.length) ? "" : `<section class="wrap flush close">${v.close.map(f => img(f)).join("")}</section>`;
 
-  // 7. 디테일 클로즈업
-  const close = !(v && v.close.length) ? "" : `<section class="wrap flush close">${v.close.map(f => img(f)).join("")}</section>`;
+  // 번호 챕터들 (나오는 순서대로 번호)
+  const C = {
+    process: () => d && d.process && chap("Process", "From brief to final image", `<ol class="proc2">${d.process.map(([s, x, t], i) => { const [ks, kx] = kAt(K.process, i); return `
+      <li><span class="n">${String.fromCharCode(65 + i)}</span><b>${esc(s)}${ks && ks !== s ? ` <i>${esc(ks)}</i>` : ""}</b><p>${esc(x)}</p>${kP(kx)}<span class="tool">${esc(t)}</span></li>`; }).join("")}</ol>`),
+    points: () => d && d.points && chap("Design points", "What the form has to do", `<ol class="pts2">${d.points.map(([t, x], i) => { const [kt, kx] = kAt(K.points, i); return `
+      <li><span class="n">${i + 1}.</span><h4>${esc(t)}</h4>${kt ? `<span class="hk">${esc(kt)}</span>` : ""}<p>${esc(x)}</p>${kP(kx)}</li>`; }).join("")}</ol>`),
+    dwg: () => d && d.figs && chap("Technical drawings", d.dwgSrc || "", `<div class="dw2"><div class="figs">${d.figs.map(([k, name, span], i) => `
+      <figure style="--s:${span}">${drawing(p.slug, k)}<figcaption><b>Fig. ${pad(i + 1)}</b>${esc(name)}</figcaption></figure>`).join("")}</div></div>`, "", [(KU.chap["Technical drawings"] || [])[0], d.dwgSrcKr || ""]),
+    real: () => {
+      if (!(d && d.real)) return "";
+      let rn = 0;
+      const shots = d.real.rows.flatMap(([, fs]) => fs);
+      const cls = d.real.studio ? "studio" : `n${Math.min(shots.length, 4)}`;
+      const rt = d.real.chap || "Mockup & test";
+      return chap(rt, d.real.studio ? "Made by hand" : "Full size, lit", `<p class="intro2">${esc(d.real.lead)}</p>${K.lead ? `<p class="intro2 k">${esc(K.lead)}</p>` : ""}<div class="mock ${cls}">${shots.map(([f, en, kr]) => `
+        <figure>${img(f)}<figcaption><b>${d.real.studio ? "" : `${++rn}. `}${esc(en)}</b>${esc(kr || "")}</figcaption></figure>`).join("")}</div>`, "dark", [(KU.chap[rt] || [])[0], d.real.krk]);
+    },
+    cmf: () => d && d.cmf && chap(d.cmfTitle || "Color, material, finish", "", `<ul class="cmf2">${d.cmf.map(([n, x, bg], i) => { const [kn, kx] = kAt(K.cmf, i); return `
+      <li><div class="sw" style="background:${bg}"></div><b>${esc(n)}</b>${kn && kn !== n ? `<i class="kn">${esc(kn)}</i>` : ""}<span>${esc(x)}</span>${kx ? `<span class="k">${esc(kx)}</span>` : ""}</li>`; }).join("")}</ul>`),
+    asm: () => d && d.parts && chap("Assembly", "From the spec sheet", `${d.asm ? `<div class="asm2">${drawing(p.slug, d.asm)}</div>` : ""}<ol class="parts2">${d.parts.map(([n, m, sz, q], i) => `
+      <li><span class="n">${i + 1}</span><b>${esc(n)}${(K.parts || [])[i] && K.parts[i] !== n ? ` <span class="pk">${esc(K.parts[i])}</span>` : ""}${q > 1 ? ` <small>× ${q}</small>` : ""}</b><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`),
+    specs: () => d && d.specs && chap("Specifications", "", `<dl class="spec2">${d.specs.map(([k, x], i) => `<div><dt>${esc(k)}${(K.specs || [])[i] && K.specs[i] !== k ? `<span>${esc(K.specs[i])}</span>` : ""}</dt><dd>${esc(x)}</dd></div>`).join("")}</dl>`)
+  };
 
-  // 8. 다음 프로젝트 (대형 타이포)
+  // 순서대로 조립. 이어지는 챕터는 한 묶음(.chaps)으로
+  let body = "", run = "";
+  for (const k of order) {
+    if (C[k]) { run += C[k]() || ""; continue; }
+    if (run) { body += `<div class="chaps">${run}</div>`; run = ""; }
+    body += O[k] || "";
+  }
+  if (run) body += `<div class="chaps">${run}</div>`;
+  body = body.replace(/\{\{CH\}\}/g, pad(ch));
+
+  // 다음 프로젝트
   const next = `
     <a class="gx nx-g" href="project.html?p=${nx.slug}">
-      <div class="gx-top"><span>(Next project)</span><span>${pad((idx + 1) % N + 1)}/${pad(N)}</span><span>${esc(nx.category)}</span><span>View project →</span></div>
+      <div class="gx-top"><span>(Next project)</span><span>${pad((idx + 1) % N + 1)}/${pad(N)}</span><span>${esc(nx.category)}${nx.study ? " · Study" : ""}</span><span>View project →</span></div>
       ${bigType(nx, "div")}
     </a>`;
 
-  app.innerHTML = `${title}${hero}${story}${compare}${dir}${gallery}${close}<div class="chaps">${chaps}</div>${next}
+  app.innerHTML = `${title}${hero}${body}${next}
     <footer class="ft"><span>© ${new Date().getFullYear()} ${esc(cap(SITE.name))}</span><a class="ul" href="index.html">All work</a></footer>`;
   fitType();
   header();

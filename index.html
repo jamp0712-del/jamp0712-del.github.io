@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hojun Yu — Industrial Designer</title>
 <meta name="description" content="Hojun Yu — industrial designer in Seoul. Product design, 3D engineering, 3D printing and rendering.">
-<link rel="stylesheet" href="style.css?v=1127c">
-<link rel="stylesheet" href="project.css?v=1127c">
+<link rel="stylesheet" href="style.css?v=1127d">
+<link rel="stylesheet" href="project.css?v=1127d">
 </head>
 <body class="pp home">
 <main id="app"></main>
-<script src="data.js?v=1127c"></script>
-<script src="kr.js?v=1127c"></script>
-<script src="common.js?v=1127c"></script>
+<script src="data.js?v=1127d"></script>
+<script src="kr.js?v=1127d"></script>
+<script src="common.js?v=1127d"></script>
 <script>
   const S = SITE, KS = (window.KR || {}).site || {}, KRP = window.KR || {};
   const card = (p, i, big) => `
@@ -25,9 +25,11 @@
       </div>
     </a>`;
   // 배치: 1장 크게, 그다음 2장씩
-  const P = PROJECTS;
-  let work = card(P[0], 0, true);
-  for (let i = 1; i < P.length; i += 2) work += `<div class="pair">${P.slice(i, i + 2).map((p, k) => card(p, i + k)).join("")}</div>`;
+  const P = PROJECTS, CS = P.filter(p => !p.study), ST = P.filter(p => p.study);
+  const pairs = (list, off) => { let h = ""; for (let i = 0; i < list.length; i += 2) h += `<div class="pair">${list.slice(i, i + 2).map((p, k) => card(p, off + i + k)).join("")}</div>`; return h; };
+  // 케이스 스터디: 1장 크게, 그다음 2장씩 / 스터디: 2장씩
+  const work = card(CS[0], 0, true) + pairs(CS.slice(1), 1);
+  const studies = pairs(ST, CS.length);
 
   app.innerHTML = `
     <section class="gx">
@@ -40,23 +42,22 @@
         <span class="l1">Hojun</span>
         <span class="l2"><span class="chip"><img src="img/flos-d2.webp" alt=""></span>Yu<sup>®</sup></span>
       </h1>
-      <a class="gx-badge" href="#work" aria-label="See work">
-        <svg viewBox="0 0 120 120"><defs><path id="gxc" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
-          <text><textPath href="#gxc">LIGHTING · PRODUCT · MOCKUP · RENDERING · </textPath></text></svg><b>↓</b></a>
       </div>
       <div class="gx-foot rv">
         <div><p class="gx-st"><b>Sketch to part,</b> mockup to image.</p><p class="st-kr">${esc(KS.hero || "")}</p></div>
         <div class="side">
           <p>${esc(S.statement)}</p>
-          <ol class="gx-idx">${P.map((p, i) => `<li><a href="project.html?p=${p.slug}"><span>${pad(i + 1)}</span><b>${esc(p.title)}</b><em>${esc(p.category)}</em></a></li>`).join("")}</ol>
+          <ol class="gx-idx">${P.map((p, i) => `<li><a href="project.html?p=${p.slug}"><span>${pad(i + 1)}</span><b>${esc(p.title)}</b><em>${esc(p.category)}${p.study ? " · Study" : ""}</em></a></li>`).join("")}</ol>
         </div>
       </div>
     </section>
     <div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(["Product Design", "3D Engineering", "Mockup", "Rendering", "AI-assisted Design", "Lighting"].map(t => `<span>${t}</span><i>✳</i>`).join("")).join("")}</div></div>
 
     <section class="wrap work2" id="work">
-      <h2 class="lbl rv"><b>Selected work</b><span>${pad(P.length)}</span></h2>
+      <h2 class="lbl rv"><b>Case studies</b><span>${pad(CS.length)}</span></h2>
       ${work}
+      <h2 class="lbl rv st-lbl"><b>Studies</b><span>${pad(ST.length)}</span></h2>
+      ${studies}
     </section>
 
     <section class="wrap say rv" id="info">

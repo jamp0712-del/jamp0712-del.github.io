@@ -1,6 +1,7 @@
 // 제품 상세: 브리프, 디자인 포인트, 도면, 분해도, CMF, 프로세스, 스펙, 부품
 // 실제 자료 기준: FLOS(래미안 제안서 사이즈·와트·재질), 멀티라이팅(시방서 부품·치수·마감, 팝업 스펙, 중간보고 컨셉)
-// 그 외 수치(색온도 옵션, 무게 등)와 Clear Wall Sconce · Linear Table Light 스펙은 설정값.
+// 근거 없는 수치는 두지 않는다. Clear Wall Sconce · Linear Table Light는 스터디라 사양·부품·도면 없음.
+// 도면은 자료에 있는 바깥 치수만 다시 그린 개략도(dwgSrc). 내부 구조를 추정한 도면은 뺐다.
 // parts 번호 = 도면 콜아웃 번호(①②③…). parts: [이름, 재질·마감, 사이즈(선택), 수량(선택)]
 // cmf: [이름, 설명, 스와치 CSS background]
 const SW = {
@@ -18,17 +19,14 @@ window.DETAILS = {
     approach: "Layered glass. Stacked tiers of clear, ribbed PC wrap an edge-lit panel; each tier catches a little stray light, so the outline glows like stacked glass while the whole fixture stays 45 mm thin. The result reads as an object on the ceiling, not a box.",
     points: [
       ["Layered-glass rim", "Three tiers of clear PC, each ribbed and stepped back from the one above. Light leaking from the LED edge is caught tier by tier and turned into a soft glowing outline."],
-      ["45 mm, every size", "Edge-lit LEDs feed a laser-dotted light guide, so the LEDs sit at the edge instead of behind the face. All three sizes keep the same 45 mm profile."],
+      ["45 mm, every size", "Edge-lit LEDs feed a light guide, so the LEDs sit at the edge instead of behind the face. All three sizes keep the same 45 mm profile."],
       ["One family, three rooms", "650 × 450 for the living room, 650 × 650 for the master bedroom, 600 × 600 for bedrooms — the same rim section and trim, so a whole home reads as one family."]
     ],
-    dwg: "FL-01", scale: "1:8 / 4:1",
+    dwgSrc: "Redrawn from the proposal · schematic · mm", dwgSrcKr: "제안서 치수로 다시 그린 개략도",
     figs: [
       ["plan", "Plan — living room, 650 × 450", 5],
-      ["section", "Section A–A", 7],
-      ["detail", "Detail B — layered rim, 4:1", 12],
-      ["family", "Family — plan sizes to scale", 12]
+      ["family", "Family — three plan sizes to scale", 7]
     ],
-    asm: "exploded",
     cmf: [
       ["Clear PC", "Layered rim, ribbed, polished", SW.clear],
       ["Opal diffuser", "Even, glare-free face", SW.opal],
@@ -48,58 +46,17 @@ window.DETAILS = {
       ["Bedroom", "L 600 × W 600 × H 45 mm · LED 40 W"],
       ["Materials", "PC · aluminum · steel"],
       ["Mounting", "Surface (flush) ceiling mount"],
-      ["Light", "Edge-lit LED, light guide + opal diffuser"],
-      ["Color temperature", "3000 / 4000 / 5700 K selectable"]
+      ["Light", "Edge-lit LED, light guide + opal diffuser"]
     ],
-    parts: [
-      ["Base plate", "Steel, white powder coat"],
-      ["Mounting bracket", "Galvanized steel"],
-      ["LED module", "Edge-lit, along the panel edge"],
-      ["Light guide plate", "4t, laser-dotted"],
-      ["Opal diffuser", "PC 1.5t"],
-      ["Layered rim", "Clear PC, 3 tiers, ribbed"],
-      ["Trim line", "Aluminum, champagne"]
-    ]
   },
 
   "clear-sconce": {
     brief: "A wall light for corridors and bedside walls that should read as a small sculpture when off, and as a soft wash on the wall when on.",
     approach: "Let the material carry the light. A brushed aluminum band holds two LED strips; clear acrylic blades above and below guide the light along their thickness, glow at their curled edges and spill onto the wall.",
     points: [
-      ["Bent, not framed", "Each 5 mm blade is heat-bent from a single sheet. No frame, no screws in view — only a clean, glowing edge."],
-      ["Up and down", "Two strips light the wall above and below, so one fixture can frame a doorway or a bed."],
-      ["Quiet metal band", "A brushed aluminum band with a soft convex face hides the driver and holds both blades."]
-    ],
-    dwg: "CS-01", scale: "1:2",
-    figs: [
-      ["front", "Front elevation", 6],
-      ["side", "Side section", 6]
-    ],
-    cmf: [
-      ["Clear acrylic", "5t, heat-bent, polished edge", SW.clear],
-      ["Aluminum", "Brushed band, clear anodized", SW.alu],
-      ["Wall plate", "Steel, matte white", "#f1f0ec"]
-    ],
-    process: [
-      ["Concept", "How far light travels inside a bent sheet, and how it leaves the edge.", "Sketch · Midjourney"],
-      ["Modeling", "Bend radius, blade length and band curvature tuned together.", "Rhino"],
-      ["Visualization", "Caustics and wall wash on a dark plaster wall.", "KeyShot"]
-    ],
-    specs: [
-      ["Dimensions", "W 180 × H 190 × D 60 mm"],
-      ["Light source", "LED 2 × 4 W, up / down"],
-      ["Color temperature", "2700 K"],
-      ["Materials", "Brushed aluminum · clear acrylic 5t"],
-      ["Mounting", "Wall plate over junction box"],
-      ["Protection", "IP20, indoor"]
-    ],
-    parts: [
-      ["Wall plate", "Steel, white"],
-      ["Band body", "Aluminum, brushed"],
-      ["LED strip", "4 W, 2700 K", "", 2],
-      ["Upper blade", "Clear acrylic 5t, heat-bent"],
-      ["Lower blade", "Clear acrylic 5t, heat-bent"],
-      ["End caps", "Aluminum, brushed", "", 2]
+      ["Bent, not framed", "Each blade is heat-bent from a single sheet. No frame, no screws in view — only a clean, glowing edge."],
+      ["Up and down", "Light leaves the band upward and downward, so one fixture can frame a doorway or a bed."],
+      ["Quiet metal band", "A brushed aluminum band with a soft convex face holds both blades."]
     ]
   },
 
@@ -111,11 +68,8 @@ window.DETAILS = {
       ["Variable PCB and diffuser", "LED boards and the diffuser can sit on top, bottom or both, so one profile gives up-light, down-light or both ways."],
       ["End caps that soften the line", "Layered end caps turn a straight extrusion into a soft, curved object and give the light its depth."]
     ],
-    dwg: "ML-04", scale: "2:1 / 1:10",
+    dwgSrc: "Redrawn from the spec sheet · schematic · mm", dwgSrcKr: "시방서 치수로 다시 그린 개략도",
     figs: [
-      ["profile", "Pendant profile, 2:1", 4],
-      ["wall", "Wall light section, 2:1", 4],
-      ["flange", "Canopy flange, 2:1", 4],
       ["elev", "Pendant elevation, 1:10", 12]
     ],
     asm: "exploded",
@@ -157,42 +111,11 @@ window.DETAILS = {
 
   "linear-desk": {
     brief: "Long tables — a home desk, a communal bar — need even light along their whole length, without a lamp head standing between the people sitting across from each other.",
-    approach: "Reduce the lamp to a line. A slim bar turns down into its legs through one soft bend, so bar, joint and leg read as a single stroke; the same bar stands on discs along a bar table or clamps to a desk edge.",
+    approach: "Reduce the lamp to a line. A slim bar turns down into its legs through one bend, so bar, joint and leg read as a single stroke; the same bar stands on discs along a bar table or clamps to a desk edge.",
     points: [
-      ["One continuous stroke", "The bar bends into the leg with a tapered radius — no visible joint, no head, just a line of light."],
-      ["Low glare, even light", "A micro-prism lens under the LED strip spreads light along the table while keeping it out of your eyes."],
-      ["Stand or clamp", "Three legs on base discs for a 1.6 m bar table; a C-clamp version for a desk, holding tops up to 40 mm."]
-    ],
-    dwg: "LT-02", scale: "1:10 / 3:1",
-    figs: [
-      ["elev", "Elevation — bar-table version, 1:10", 12],
-      ["bar", "Bar section, 3:1", 6],
-      ["clamp", "Desk version — clamp, side view", 6]
-    ],
-    cmf: [
-      ["Graphite", "Anodized aluminum bar", SW.graphite],
-      ["Satin aluminum", "Legs, bead-blasted", SW.steel],
-      ["Prism lens", "PMMA, micro-prism", SW.frost]
-    ],
-    process: [
-      ["Concept", "Line studies — how thin a table light can get, and where the leg meets the bar.", "Sketch"],
-      ["Modeling", "Bar section, lens and the tapered corner joint.", "Rhino"],
-      ["Visualization", "From a dark home desk to a long bar table at night.", "KeyShot"]
-    ],
-    specs: [
-      ["Bar-table version", "L 1600 × H 450 mm, 3 legs on base discs"],
-      ["Desk version", "Single span with C-clamp, tops ≤ 40 mm"],
-      ["Bar section", "18 × 12 mm"],
-      ["Light source", "LED strip, 3000 K"],
-      ["Optics", "Micro-prism lens, low glare"],
-      ["Materials", "Anodized aluminum · PMMA lens"]
-    ],
-    parts: [
-      ["Light bar", "Aluminum extrusion, anodized"],
-      ["LED strip", "3000 K, on aluminum PCB"],
-      ["Micro-prism lens", "PMMA, glare control"],
-      ["Leg", "Aluminum tube, tapered corner", "", 3],
-      ["Base disc / desk clamp", "Aluminum, satin"]
+      ["One continuous stroke", "The bar turns straight down into the leg — no visible joint, no lamp head, just a line of light."],
+      ["Light along the table", "The light runs the full length of the bar, so the whole table is lit evenly with nothing standing between the people across it."],
+      ["Stand or clamp", "On a long bar table it stands on small base discs; on a desk it clamps to the edge."]
     ]
   },
 
@@ -278,8 +201,8 @@ window.DETAILS = {
         ["Hang it simply", "Three suspension layouts were compared — both ends, center, center with a new end cap — and the centered V-wire was selected."],
         ["White to metal", "The first white version became satin silver, so the pendant reads as an object even when it is off."]
       ],
-      figs: [["elev", "Front elevation · 1050 × 70", 12], ["section", "Section · up + down light", 6], ["endcap", "End cap · satin hairline", 6], ["options", "Suspension options", 12]],
-      asm: "exploded", dwg: "IP-01", scale: "1:5 / 2:1",
+      figs: [["elev", "Front elevation · 1050 × 70", 12], ["endcap", "End cap · 70.4 × 54.6", 4], ["options", "Suspension options — center selected", 8]],
+      asm: "exploded", dwgSrc: "Redrawn from the spec sheet · schematic · mm", dwgSrcKr: "시방서 치수로 다시 그린 개략도",
       cmf: [
         ["Satin silver", "End cap, flange, wire adjuster · satin plating, horizontal hairline", "linear-gradient(90deg,#c9c9c9,#efefef 40%,#bdbdbd 70%,#e6e6e6)"],
         ["Aluminum body", "Extruded, anodized silver", "#cfd0d0"],
@@ -339,5 +262,14 @@ window.DETAILS = {
       }
     }
   };
+  // 섹션 순서: 케이스 스터디는 가장 강한 근거부터, 스터디는 짧게
+  const ORDER = {
+    "multi-lighting": ["story", "vs", "points", "asm", "real", "process", "gal", "close", "dwg", "cmf", "specs"],
+    "industrial-pendant": ["story", "vs", "dir", "points", "dwg", "real", "gal", "close", "asm", "process", "cmf", "specs"],
+    flos: ["story", "vs", "dir", "gal", "close", "points", "dwg", "cmf", "process", "specs"],
+    "linear-desk": ["story", "vs", "gal", "close", "real", "points"],
+    "clear-sconce": ["story", "vs", "gal", "close", "points"]
+  };
+  for (const k in ORDER) X[k].order = ORDER[k];
   for (const k in X) window.DETAILS[k] = Object.assign(window.DETAILS[k] || {}, X[k]);
 })();

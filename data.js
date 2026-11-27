@@ -1,5 +1,6 @@
 // 포트폴리오 내용은 전부 여기서 수정.
 // gallery: 한 줄에 이미지 1장(크게) 또는 2장(반반)
+// 순서 = 사이트 순서. study: true 는 짧은 스터디 페이지
 window.SITE = {
   name: "HOJUN YU",
   role: "Industrial Designer",
@@ -24,52 +25,6 @@ window.SITE = {
 };
 
 window.PROJECTS = [
-  {
-    slug: "flos",
-    theme: "light",
-    tagline: "Light, right to the edge.",
-    title: "Raemian FLOS",
-    kr: "래미안 플로스",
-    category: "Ceiling Light",
-    year: "2026",
-    role: "Product Design · 3D Modeling · Rendering",
-    client: "Raemian — design proposal",
-    summary: "A flush-mount main light for Raemian residences. Stacked tiers of clear PC wrap an edge-lit panel, so the outline glows like layered glass — a premium object on the ceiling, only 45 mm thin.",
-    body: [
-      "FLOS started from one question: how can a flat ceiling light feel lighter than the ceiling it sits on? The answer was a layered, transparent rim that wraps a warm diffuser and turns its edge into a soft line of light.",
-      "The same rim and trim were developed into three sizes — living room, master bedroom and bedroom — and tested in room scenes to check how each one holds its space."
-    ],
-    chip: "flos-08.webp",
-    cover: "flos-24.webp",
-    gallery: [
-      ["flos-01.webp"],
-            ["flos-07.webp", "flos-08.webp"],
-      ["flos-16.webp"],
-      ["flos-10.webp"],
-      ["flos-14.webp"],
-      ["flos-22.webp"]
-    ]
-  },
-  {
-    slug: "clear-sconce",
-    theme: "dark",
-    tagline: "Glass that carries light.",
-    title: "Clear Wall Sconce",
-    kr: "아크릴 벽등",
-    category: "Wall Light",
-    year: "2026",
-    role: "Product Design · Rendering",
-    client: "In-house",
-    summary: "A brushed aluminum band between two curled blades of clear acrylic — light runs through the blades, glows at their edges and washes the wall above and below.",
-    body: [
-      "The acrylic is bent rather than framed, so each edge becomes a light guide. The metal body stays simple to let the glow on the wall do the work."
-    ],
-    chip: "sconce-d1.webp",
-    cover: "multi-03.webp",
-    gallery: [
-      ["multi-02.webp"]
-    ]
-  },
   {
     slug: "multi-lighting",
     theme: "light",
@@ -118,7 +73,34 @@ window.PROJECTS = [
     ]
   },
   {
+    slug: "flos",
+    theme: "light",
+    tagline: "Light, right to the edge.",
+    title: "Raemian FLOS",
+    kr: "래미안 플로스",
+    category: "Ceiling Light",
+    year: "2026",
+    role: "Product Design · 3D Modeling · Rendering",
+    client: "Raemian — design proposal",
+    summary: "A flush-mount main light for Raemian residences. Stacked tiers of clear PC wrap an edge-lit panel, so the outline glows like layered glass — a premium object on the ceiling, only 45 mm thin.",
+    body: [
+      "FLOS started from one question: how can a flat ceiling light feel lighter than the ceiling it sits on? The answer was a layered, transparent rim that wraps a warm diffuser and turns its edge into a soft line of light.",
+      "The same rim and trim were developed into three sizes — living room, master bedroom and bedroom — and tested in room scenes to check how each one holds its space."
+    ],
+    chip: "flos-08.webp",
+    cover: "flos-24.webp",
+    gallery: [
+      ["flos-01.webp"],
+            ["flos-07.webp", "flos-08.webp"],
+      ["flos-16.webp"],
+      ["flos-10.webp"],
+      ["flos-14.webp"],
+      ["flos-22.webp"]
+    ]
+  },
+  {
     slug: "linear-desk",
+    study: true,
     theme: "dark",
     tagline: "A single line of light.",
     title: "Linear Table Light",
@@ -136,6 +118,27 @@ window.PROJECTS = [
     gallery: [
       ["linear-01.webp", "linear-02.webp"],
       ["linear-09.webp"]
+    ]
+  },
+  {
+    slug: "clear-sconce",
+    study: true,
+    theme: "dark",
+    tagline: "Glass that carries light.",
+    title: "Clear Wall Sconce",
+    kr: "아크릴 벽등",
+    category: "Wall Light",
+    year: "2026",
+    role: "Product Design · Rendering",
+    client: "In-house",
+    summary: "A brushed aluminum band between two curled blades of clear acrylic — light runs through the blades, glows at their edges and washes the wall above and below.",
+    body: [
+      "The acrylic is bent rather than framed, so each edge becomes a light guide. The metal body stays simple to let the glow on the wall do the work."
+    ],
+    chip: "sconce-d1.webp",
+    cover: "multi-03.webp",
+    gallery: [
+      ["multi-02.webp"]
     ]
   }
 ];

@@ -53,7 +53,6 @@
       // 실제 제안서 사이즈: 거실 650×450×45, 안방 650×650×45, 침실 600×600×45
       plan: () => svg("0 0 440 330", `
         <line class="cl" x1="220" y1="28" x2="220" y2="286"/>
-        <line class="cut" x1="40" y1="157" x2="400" y2="157"/>${secA(50, 157, "A")}${secA(390, 157, "A")}
         <rect class="l" x="74" y="56" width="292.5" height="202.5" rx="30"/>
         <rect class="l thin" x="77" y="59" width="286.5" height="196.5" rx="27"/>
         <rect class="l" x="80" y="62" width="280.5" height="190.5" rx="24"/>
@@ -61,7 +60,6 @@
         <rect class="l" x="86" y="68" width="268.5" height="178.5" rx="18"/>
         <rect class="trimline" x="89" y="71" width="262.5" height="172.5" rx="15"/>
         <rect class="glow l" x="92" y="74" width="256.5" height="166.5" rx="12"/>
-        ${bub(80, 157, 20, "B", 80, 128)}
         ${note(220, 150, "LIGHT-EMITTING FACE", "middle")}
         ${dimH(74, 366.5, 304, "650", 258.5)}${dimV(56, 258.5, 418, "450", 366.5)}`),
       section: () => svg("0 0 640 190", `

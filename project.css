@@ -261,7 +261,7 @@ body.pp { --bg: #ffffff; --ink: #111111; --mute: #8e8e93; --line: #e6e6e6; --til
 @media (prefers-reduced-motion: reduce) { .gx-badge svg, .gx-mq > div { animation: none; } }
 
 /* ---------- project pages: graphic system (same language as home hero) ---------- */
-.gx-name.fit { font-size: clamp(72px, 17vw, 270px); }
+.gx-name.fit { font-size: clamp(56px, 9.5vw, 156px); }
 .gx-p .gx-foot { padding-bottom: 8vh; }
 .gx-p .gx-idx a em { font-size: 12px; }
 .gx-p + .wrap.flush { margin-top: 0; }
@@ -299,7 +299,7 @@ body.pp { --bg: #ffffff; --ink: #111111; --mute: #8e8e93; --line: #e6e6e6; --til
 /* chapter headers: oversized numerals */
 .chap > header { display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 0 22px; padding-bottom: 22px; margin-bottom: 34px; border-bottom: 1px solid var(--ink); }
 .chap.dark > header { border-color: #f2f2f2; }
-.chap .no { font-size: clamp(60px, 7.4vw, 124px); font-weight: 800; letter-spacing: -0.065em; line-height: .76; }
+.chap .no { font-size: clamp(40px, 4.4vw, 72px); font-weight: 800; letter-spacing: -0.065em; line-height: .76; }
 .chap h3 { font-size: clamp(26px, 2.9vw, 46px); font-weight: 800; letter-spacing: -0.045em; line-height: .95; text-transform: uppercase; }
 .chap .sub { display: block; margin-top: 10px; }
 .chap .tick { font-size: 12px; color: var(--mute); padding-bottom: 4px; }
@@ -313,7 +313,7 @@ body.pp { --bg: #ffffff; --ink: #111111; --mute: #8e8e93; --line: #e6e6e6; --til
 .nx-g:hover .chip { width: 2.6em; }
 
 @media (max-width: 820px) {
-  .gx-name.fit { font-size: 24vw; }
+  .gx-name.fit { font-size: 15vw; }
   .lrow { grid-template-columns: 1fr 1fr; row-gap: 6px; }
   .say .cols { grid-template-columns: 1fr; gap: 18px; }
   .note2 { grid-template-columns: 26px 1fr; }
@@ -374,3 +374,9 @@ body.pp { --bg: #ffffff; --ink: #111111; --mute: #8e8e93; --line: #e6e6e6; --til
   .home .say .cols { grid-template-columns: 1fr; gap: 18px; }
   .gx-idx a b small { display: block; margin: 2px 0 0; }
 }
+
+/* ---------- v3: 섹션 순서가 프로젝트마다 달라서 묶음 간격 정리 ---------- */
+.chaps { margin-top: 12vh; }
+.chaps + .wrap { margin-top: 16vh; }
+.work2 .st-lbl { margin-top: 140px; }
+.work2 .st-lbl + .pair { margin-top: 0; }

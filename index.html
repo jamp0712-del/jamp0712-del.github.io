@@ -22,7 +22,6 @@
         <span class="no">${pad(i + 1)}</span>
         <h3>${esc(p.title)} <em>${esc(p.tagline)}</em></h3>
         <span class="cat">${esc(p.category)} · ${esc(p.year)}<i>View project →</i></span>
-        ${(KRP[p.slug] || {}).tagline ? `<p class="tk"><b>${esc(p.kr)}</b> ${esc(KRP[p.slug].tagline)}</p>` : ""}
       </div>
     </a>`;
   // 배치: 1장 크게, 그다음 2장씩
@@ -49,21 +48,19 @@
         <div><p class="gx-st"><b>Sketch to part,</b> mockup to image.</p><p class="st-kr">${esc(KS.hero || "")}</p></div>
         <div class="side">
           <p>${esc(S.statement)}</p>
-          <p class="kr">${esc(S.statementKr)}</p>
-          <ol class="gx-idx">${P.map((p, i) => `<li><a href="project.html?p=${p.slug}"><span>${pad(i + 1)}</span><b>${esc(p.title)} <small>${esc((KRP[p.slug] || {}).category || "")}</small></b><em>${esc(p.category)}</em></a></li>`).join("")}</ol>
+          <ol class="gx-idx">${P.map((p, i) => `<li><a href="project.html?p=${p.slug}"><span>${pad(i + 1)}</span><b>${esc(p.title)}</b><em>${esc(p.category)}</em></a></li>`).join("")}</ol>
         </div>
       </div>
     </section>
-    <div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(["Product Design", "3D Engineering", "Mockup", "Rendering", "AI-assisted Design", "Lighting"].map((t, i) => `<span>${t} <small>${esc((KS.marquee || [])[i] || "")}</small></span><i>✳</i>`).join("")).join("")}</div></div>
+    <div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(["Product Design", "3D Engineering", "Mockup", "Rendering", "AI-assisted Design", "Lighting"].map(t => `<span>${t}</span><i>✳</i>`).join("")).join("")}</div></div>
 
     <section class="wrap work2" id="work">
-      <h2 class="lbl rv"><b>Selected work <em>${esc(KS.work || "")}</em></b><span>${pad(P.length)}</span></h2>
+      <h2 class="lbl rv"><b>Selected work</b><span>${pad(P.length)}</span></h2>
       ${work}
     </section>
 
     <section class="wrap say rv" id="info">
       <h2>One designer, <span>the whole process.</span></h2>
-      <p class="h-kr">${esc(KS.say || "")}</p>
       <div class="cols"><div>${S.about.map(t => `<p>${esc(t)}</p>`).join("")}</div><div>${(KS.about || []).map(t => `<p class="kr">${esc(t)}</p>`).join("")}</div></div>
     </section>
 
@@ -80,7 +77,7 @@
 
     <section class="wrap contact2 rv">
       <span class="lab">Contact <i>${esc(KS.contactLab || "")}</i></span>
-      <h2>Let's build <span>the next light.</span></h2>
+      <h2>Let's make <span>the next product.</span></h2>
       <p class="h-kr">${esc(KS.contact || "")}</p>
       <a class="mail" href="mailto:${esc(S.email)}">${esc(S.email)} →</a>
     </section>

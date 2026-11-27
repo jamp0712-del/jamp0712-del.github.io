@@ -96,14 +96,14 @@
       <div class="gx-foot rv">
         <div><p class="gx-st">${twoTone(p.tagline)}</p>${K.tagline ? `<p class="st-kr">${esc(K.tagline)}</p>` : ""}</div>
         <div class="side">
-          <p>${esc(p.summary)}</p>${K.summary ? `<p class="kr">${esc(K.summary)}</p>` : ""}
-          <ol class="gx-idx">${contents.map(([id, t, k], i) => `<li><a href="#${id}"><span>${pad(i + 1)}</span><b>${esc(t)}${k ? ` <small>${esc(k)}</small>` : ""}</b><em>↓</em></a></li>`).join("")}</ol>
+          <p>${esc(p.summary)}</p>
+          <ol class="gx-idx">${contents.map(([id, t, k], i) => `<li><a href="#${id}"><span>${pad(i + 1)}</span><b>${esc(t)}</b><em>↓</em></a></li>`).join("")}</ol>
         </div>
       </div>
     </section>`;
 
   // 2. 히어로 이미지 + 키워드 마키
-  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>${marquee([[p.category, K.category], ...(d ? d.points.map((x, i) => [x[0], kAt(K.points, i)[0]]) : [p.tagline])])}`;
+  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>${marquee([p.category, ...(d ? d.points.map(x => x[0]) : [p.tagline])])}`;
 
   // 3. 두 톤 헤드라인 + 개요
   const headline = v ? v.head : (d && d.q) || [p.tagline, ""];
@@ -111,7 +111,6 @@
     <section class="wrap say" id="story">
       ${lab(`(Overview) <i>${KU.story}</i>`, esc(p.title), esc(p.year), esc(p.kr))}
       <h2 class="rv">${esc(headline[0])} <span>${esc(headline[1] || "")}</span></h2>
-      ${K.head || (d && d.qkr) ? `<p class="h-kr rv">${esc(K.head || d.qkr)}</p>` : ""}
       <div class="cols rv">${d ? `<p>${esc(d.brief)}</p>` : ""}${d && d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}</div>
     </section>`;
 
@@ -146,7 +145,7 @@
   // 8. 다음 프로젝트 (대형 타이포)
   const next = `
     <a class="gx nx-g" href="project.html?p=${nx.slug}">
-      <div class="gx-top"><span>(Next project)<br>${KU.next}</span><span>${pad((idx + 1) % N + 1)}/${pad(N)}</span><span>${esc(nx.category)}<br>${esc(nx.kr)}</span><span>View project →<br>${KU.view}</span></div>
+      <div class="gx-top"><span>(Next project)</span><span>${pad((idx + 1) % N + 1)}/${pad(N)}</span><span>${esc(nx.category)}</span><span>View project →</span></div>
       ${bigType(nx, "div")}
     </a>`;
 

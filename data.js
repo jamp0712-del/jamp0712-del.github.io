@@ -9,16 +9,16 @@ window.SITE = {
   instagram: "",
   behance: "",
   about: [
-    "Industrial designer in Seoul who works as a multi-player: concept and form design, production-ready 3D engineering, 3D printing and mockup assembly, and photoreal rendering — all in one hand.",
-    "I use AI as a real part of the toolkit — Midjourney for fast direction and mood, Claude and ChatGPT for research, specs and documentation — so ideas move from concept to tested prototype faster."
+    "Industrial designer based in Seoul, focused on lighting. I take each project from concept and form through production-ready 3D engineering, 3D-printed mockups and final rendering, so the intent of the first sketch holds all the way to the finished product.",
+    "AI is part of my everyday toolkit: Midjourney to explore direction quickly, Claude and ChatGPT for research, specifications and documentation. It shortens the path from idea to tested mockup."
   ],
   // 역량 (Info 섹션)
   capabilities: [
-    { t: "Product Design", d: "Form, proportion and detail — from the first sketch to a finished object." },
-    { t: "3D Engineering", d: "Production-ready parts modeled in Rhino, down to brackets and end caps." },
-    { t: "3D Printing & Mockup", d: "Printed, assembled and tested at full scale before tooling." },
-    { t: "Rendering", d: "Photoreal scenes in KeyShot that sell the idea before it exists." },
-    { t: "AI-assisted Design", d: "Midjourney for direction, Claude and ChatGPT for research and specs." }
+    { t: "Product Design", d: "I shape form, proportion and detail from the first sketch to the finished product." },
+    { t: "3D Engineering", d: "I model production-ready parts in Rhino, down to brackets, end caps and tolerances." },
+    { t: "3D Printing & Mockup", d: "I print, assemble and test full-size mockups before any tooling." },
+    { t: "Rendering", d: "I build photoreal KeyShot scenes that show the product before it exists." },
+    { t: "AI-assisted Design", d: "I use Midjourney for direction, and Claude and ChatGPT for research and specifications." }
   ],
   skills: ["Rhino", "KeyShot", "Illustrator", "Photoshop", "Midjourney", "Claude", "ChatGPT", "Sketching"]
 };

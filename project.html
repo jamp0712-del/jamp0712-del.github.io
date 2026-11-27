@@ -13,6 +13,7 @@
 <script src="details.js"></script>
 <script src="drawings.js"></script>
 <script src="vs.js"></script>
+<script src="kr.js"></script>
 <script src="common.js"></script>
 <script>
   const slug = new URLSearchParams(location.search).get("p");
@@ -20,6 +21,10 @@
   const p = PROJECTS[idx], nx = PROJECTS[(idx + 1) % PROJECTS.length];
   const d = (window.DETAILS || {})[p.slug] || null;
   const v = (window.VS || {})[p.slug] || null;
+  // 한글 카피 (kr.js)
+  const KR = window.KR || {}, K = KR[p.slug] || {}, KU = KR.ui || { chap: {} };
+  const kAt = (a, i) => (a && a[i]) || [];
+  const kP = t => t ? `<p class="k">${esc(t)}</p>` : "";
   document.title = `${p.title} — ${cap(SITE.name)}`;
 
   const img = (f, cls = "") => `<div class="ph ${cls}"><img src="img/${f}" alt="${esc(p.title)}" loading="lazy"></div>`;
@@ -32,14 +37,14 @@
     return `<${tag} class="gx-name fit" aria-label="${esc(q.title)}">${w.length ? `<span class="l1">${esc(w.join(" "))}</span>` : ""}<span class="l2"><span class="chip"><img src="img/${q.chip || q.cover}" alt=""></span>${esc(last)}</span></${tag}>`;
   };
   const twoTone = t => { const w = t.split(" "), h = Math.ceil(w.length / 2); return `<b>${esc(w.slice(0, h).join(" "))}</b> ${esc(w.slice(h).join(" "))}`; };
-  const marquee = words => `<div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(words.map(t => `<span>${esc(t)}</span><i>✳</i>`).join("")).join("")}</div></div>`;
+  const marquee = words => `<div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(words.map(w => { const [e, k] = [].concat(w); return `<span>${esc(e)}${k ? ` <small>${esc(k)}</small>` : ""}</span><i>✳</i>`; }).join("")).join("")}</div></div>`;
 
   let ch = 0; const toc = [];
-  const chap = (title, sub, inner, cls = "") => {
-    ch++; toc.push([`c${ch}`, title]);
+  const chap = (title, sub, inner, cls = "", kOver) => {
+    ch++; const [kt, ks] = kOver || KU.chap[title] || []; toc.push([`c${ch}`, title, kt]);
     return `
     <section class="chap ${cls} rv" id="c${ch}">
-      <header><span class="no">${pad(ch)}</span><div><h3>${esc(title)}</h3>${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</div><span class="tick">(${pad(ch)}/{{CH}})</span></header>
+      <header><span class="no">${pad(ch)}</span><div><h3>${esc(title)}${kt ? ` <i>${esc(kt)}</i>` : ""}</h3>${sub ? `<span class="sub">${esc(sub)}</span>` : ""}${ks ? `<span class="sk">${esc(ks)}</span>` : ""}</div><span class="tick">(${pad(ch)}/{{CH}})</span></header>
       ${inner}
     </section>`;
   };
@@ -52,29 +57,30 @@
   // 번호 챕터들
   let chaps = "";
   if (d) {
-    chaps += chap("Process", "From brief to final image", `<ol class="proc2">${d.process.map(([s, x, t], i) => `
-      <li><span class="n">${String.fromCharCode(65 + i)}</span><b>${esc(s)}</b><p>${esc(x)}</p><span class="tool">${esc(t)}</span></li>`).join("")}</ol>`);
-    chaps += chap("Design points", "What the form has to do", `<ol class="pts2">${d.points.map(([t, x], i) => `
-      <li><span class="n">${i + 1}.</span><h4>${esc(t)}</h4><p>${esc(x)}</p></li>`).join("")}</ol>`);
+    chaps += chap("Process", "From brief to final image", `<ol class="proc2">${d.process.map(([s, x, t], i) => { const [ks, kx] = kAt(K.process, i); return `
+      <li><span class="n">${String.fromCharCode(65 + i)}</span><b>${esc(s)}${ks && ks !== s ? ` <i>${esc(ks)}</i>` : ""}</b><p>${esc(x)}</p>${kP(kx)}<span class="tool">${esc(t)}</span></li>`; }).join("")}</ol>`);
+    chaps += chap("Design points", "What the form has to do", `<ol class="pts2">${d.points.map(([t, x], i) => { const [kt, kx] = kAt(K.points, i); return `
+      <li><span class="n">${i + 1}.</span><h4>${esc(t)}</h4>${kt ? `<span class="hk">${esc(kt)}</span>` : ""}<p>${esc(x)}</p>${kP(kx)}</li>`; }).join("")}</ol>`);
     chaps += chap("Technical drawings", `${d.dwg} · Scale ${d.scale} · mm`, `<div class="dw2"><div class="figs">${d.figs.map(([k, name, span], i) => `
       <figure style="--s:${span}">${drawing(p.slug, k)}<figcaption><b>Fig. ${pad(i + 1)}</b>${esc(name)}</figcaption></figure>`).join("")}</div></div>`);
     if (d.real) {
       let rn = 0;
       const shots = d.real.rows.flatMap(([, fs]) => fs);
       const cls = d.real.studio ? "studio" : `n${Math.min(shots.length, 4)}`;
-      chaps += chap(d.real.chap || "Mockup & test", d.real.krk || "", `<p class="intro2">${esc(d.real.lead)}</p><div class="mock ${cls}">${shots.map(([f, en, kr]) => `
-        <figure>${img(f)}<figcaption><b>${d.real.studio ? "" : `${++rn}. `}${esc(en)}</b>${esc(kr || "")}</figcaption></figure>`).join("")}</div>`, "dark");
+      const rt = d.real.chap || "Mockup & test";
+      chaps += chap(rt, d.real.studio ? "Made by hand" : "Full size, lit", `<p class="intro2">${esc(d.real.lead)}</p>${K.lead ? `<p class="intro2 k">${esc(K.lead)}</p>` : ""}<div class="mock ${cls}">${shots.map(([f, en, kr]) => `
+        <figure>${img(f)}<figcaption><b>${d.real.studio ? "" : `${++rn}. `}${esc(en)}</b>${esc(kr || "")}</figcaption></figure>`).join("")}</div>`, "dark", [(KU.chap[rt] || [])[0], d.real.krk]);
     }
-    chaps += chap(d.cmfTitle || "Color, material, finish", "", `<ul class="cmf2">${d.cmf.map(([n, x, bg]) => `
-      <li><div class="sw" style="background:${bg}"></div><b>${esc(n)}</b><span>${esc(x)}</span></li>`).join("")}</ul>`);
+    chaps += chap(d.cmfTitle || "Color, material, finish", "", `<ul class="cmf2">${d.cmf.map(([n, x, bg], i) => { const [kn, kx] = kAt(K.cmf, i); return `
+      <li><div class="sw" style="background:${bg}"></div><b>${esc(n)}</b>${kn && kn !== n ? `<i class="kn">${esc(kn)}</i>` : ""}<span>${esc(x)}</span>${kx ? `<span class="k">${esc(kx)}</span>` : ""}</li>`; }).join("")}</ul>`);
     chaps += chap("Assembly", "Parts and finishes", `${d.asm ? `<div class="asm2">${drawing(p.slug, d.asm)}</div>` : ""}<ol class="parts2">${d.parts.map(([n, m, sz, q], i) => `
-      <li><span class="n">${i + 1}</span><b>${esc(n)}${q > 1 ? ` <small>× ${q}</small>` : ""}</b><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
-    chaps += chap("Specifications", "", `<dl class="spec2">${d.specs.map(([k, x]) => `<div><dt>${esc(k)}</dt><dd>${esc(x)}</dd></div>`).join("")}</dl>`);
+      <li><span class="n">${i + 1}</span><b>${esc(n)}${(K.parts || [])[i] && K.parts[i] !== n ? ` <span class="pk">${esc(K.parts[i])}</span>` : ""}${q > 1 ? ` <small>× ${q}</small>` : ""}</b><em>${esc(m)}</em><i>${sz ? esc(sz) : ""}</i></li>`).join("")}</ol>`);
+    chaps += chap("Specifications", "", `<dl class="spec2">${d.specs.map(([k, x], i) => `<div><dt>${esc(k)}${(K.specs || [])[i] && K.specs[i] !== k ? `<span>${esc(K.specs[i])}</span>` : ""}</dt><dd>${esc(x)}</dd></div>`).join("")}</dl>`);
   }
   chaps = chaps.replace(/\{\{CH\}\}/g, pad(ch));
 
   // 1. 그래픽 히어로 (메인과 같은 구성)
-  const contents = [["story", "Overview"], ...(v ? [["vs", "Problem → idea"]] : []), ...(d && d.dir ? [["dir", "Direction"]] : []), ["gal", "Images"], ...toc];
+  const contents = [["story", "Overview", KU.story], ...(v ? [["vs", "Problem → idea", KU.vs]] : []), ...(d && d.dir ? [["dir", "Direction", KU.dir]] : []), ["gal", "Images", KU.gal], ...toc];
   const title = `
     <section class="gx gx-p">
       <div class="gx-lines" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -88,50 +94,51 @@
             <text><textPath href="#gxc">${esc(`${p.category} · ${p.year} · ${pad(idx + 1)}/${pad(N)} · `.toUpperCase())}</textPath></text></svg><b>↓</b></a>
       </div>
       <div class="gx-foot rv">
-        <p class="gx-st">${twoTone(p.tagline)}</p>
+        <div><p class="gx-st">${twoTone(p.tagline)}</p>${K.tagline ? `<p class="st-kr">${esc(K.tagline)}</p>` : ""}</div>
         <div class="side">
-          <p>${esc(p.summary)}</p>
-          <ol class="gx-idx">${contents.map(([id, t], i) => `<li><a href="#${id}"><span>${pad(i + 1)}</span>${esc(t)}<em>↓</em></a></li>`).join("")}</ol>
+          <p>${esc(p.summary)}</p>${K.summary ? `<p class="kr">${esc(K.summary)}</p>` : ""}
+          <ol class="gx-idx">${contents.map(([id, t, k], i) => `<li><a href="#${id}"><span>${pad(i + 1)}</span><b>${esc(t)}${k ? ` <small>${esc(k)}</small>` : ""}</b><em>↓</em></a></li>`).join("")}</ol>
         </div>
       </div>
     </section>`;
 
   // 2. 히어로 이미지 + 키워드 마키
-  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>${marquee([p.category, ...(d ? d.points.map(x => x[0]) : [p.tagline])])}`;
+  const hero = `<section class="wrap flush">${img(p.cover, "hero")}${stack(lead)}</section>${marquee([[p.category, K.category], ...(d ? d.points.map((x, i) => [x[0], kAt(K.points, i)[0]]) : [p.tagline])])}`;
 
   // 3. 두 톤 헤드라인 + 개요
   const headline = v ? v.head : (d && d.q) || [p.tagline, ""];
   const story = `
     <section class="wrap say" id="story">
-      ${lab("(Overview)", esc(p.title), esc(p.year), "")}
+      ${lab(`(Overview) <i>${KU.story}</i>`, esc(p.title), esc(p.year), esc(p.kr))}
       <h2 class="rv">${esc(headline[0])} <span>${esc(headline[1] || "")}</span></h2>
+      ${K.head || (d && d.qkr) ? `<p class="h-kr rv">${esc(K.head || d.qkr)}</p>` : ""}
       <div class="cols rv">${d ? `<p>${esc(d.brief)}</p>` : ""}${d && d.kr ? `<p class="kr">${esc(d.kr)}</p>` : ""}</div>
     </section>`;
 
   // 4. 기존 → 새 방식 비교
   const compare = !v ? "" : `
     <section class="wrap" id="vs">
-      ${lab("(Problem → idea)", esc(v.from), "→", esc(v.to))}
+      ${lab(`(Problem → idea) <i>${KU.vs}</i>`, esc(v.from), "→", esc(v.to))}
       <div class="vs rv">
-        <div class="pan"><span class="tg">Before</span><b>${esc(v.a[0])}</b><span>${esc(v.a[1])}</span>${v.svg[0]}</div>
+        <div class="pan"><span class="tg">Before</span><b>${esc(v.a[0])}</b>${K.a && K.a[0] !== v.a[0] ? `<em class="kt">${esc(K.a[0])}</em>` : ""}<span>${esc(v.a[1])}</span>${kP(K.a && K.a[1])}${v.svg[0]}</div>
         <div class="arr" aria-hidden="true">→</div>
-        <div class="pan on"><span class="tg">After</span><b>${esc(v.b[0])}</b><span>${esc(v.b[1])}</span>${v.svg[1]}</div>
+        <div class="pan on"><span class="tg">After</span><b>${esc(v.b[0])}</b>${K.b && K.b[0] !== v.b[0] ? `<em class="kt">${esc(K.b[0])}</em>` : ""}<span>${esc(v.b[1])}</span>${kP(K.b && K.b[1])}${v.svg[1]}</div>
       </div>
     </section>`;
 
   // 5. 디렉션
   const dir = !(d && d.dir) ? "" : `
     <section class="wrap" id="dir">
-      ${lab("(Direction)", esc(d.dir.label), esc(d.dir.kr), "")}
+      ${lab(`(Direction) <i>${KU.dir}</i>`, esc(d.dir.label), esc(d.dir.kr), "")}
       <div class="dir2 rv">
-        <div class="tx"><h3>${esc(d.dir.t)}</h3><span class="krs">${esc(d.dir.kr)}</span><p>${esc(d.approach)}</p></div>
+        <div class="tx"><h3>${esc(d.dir.t)}</h3><span class="krs">${esc(d.dir.kr)}</span><p>${esc(d.approach)}</p>${kP(K.approach)}</div>
         ${img(d.dir.img)}
       </div>
     </section>`;
 
   // 6. 갤러리 나머지 + 설명 문단
-  const notes = p.body.map(t => `<p class="note2 rv"><i>✳</i>${esc(t)}</p>`);
-  const gallery = `<section class="wrap" id="gal">${lab("(Images)", `${pad(gal.length)} views`, "", "")}</section><section class="wrap flush">${more.map((r, i) => stack([r]) + (i % 2 === 1 && notes.length ? notes.shift() : "")).join("")}</section>${notes.length ? `<section class="wrap">${notes.join("")}</section>` : ""}`;
+  const notes = p.body.map((t, i) => `<p class="note2 rv"><i>✳</i><span>${esc(t)}${(K.body || [])[i] ? `<span class="k">${esc(K.body[i])}</span>` : ""}</span></p>`);
+  const gallery = `<section class="wrap" id="gal">${lab(`(Images) <i>${KU.gal}</i>`, `${pad(gal.length)} views`, "", "")}</section><section class="wrap flush">${more.map((r, i) => stack([r]) + (i % 2 === 1 && notes.length ? notes.shift() : "")).join("")}</section>${notes.length ? `<section class="wrap">${notes.join("")}</section>` : ""}`;
 
   // 7. 디테일 클로즈업
   const close = !(v && v.close.length) ? "" : `<section class="wrap flush close">${v.close.map(f => img(f)).join("")}</section>`;
@@ -139,7 +146,7 @@
   // 8. 다음 프로젝트 (대형 타이포)
   const next = `
     <a class="gx nx-g" href="project.html?p=${nx.slug}">
-      <div class="gx-top"><span>(Next project)</span><span>${pad((idx + 1) % N + 1)}/${pad(N)}</span><span>${esc(nx.category)}</span><span>View project →</span></div>
+      <div class="gx-top"><span>(Next project)<br>${KU.next}</span><span>${pad((idx + 1) % N + 1)}/${pad(N)}</span><span>${esc(nx.category)}<br>${esc(nx.kr)}</span><span>View project →<br>${KU.view}</span></div>
       ${bigType(nx, "div")}
     </a>`;
 

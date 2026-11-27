@@ -243,32 +243,32 @@ window.DETAILS = {
 (() => {
   const X = {
     flos: {
-      kr: "래미안 조명 차별화 제안 중 거실·침실 메인등. 집에서 가장 눈에 띄는 조명인데도 대부분 천장에 붙은 평평한 흰 판에 머문다. 투명 PC를 계단처럼 겹친 테두리로 엣지 조명 패널을 감싸, 45mm 두께 안에서 테두리가 겹친 유리처럼 빛나게 했다.",
+      kr: "래미안 조명 차별화 제안 중 거실·침실 메인등입니다. 집에서 가장 눈에 띄는 조명인데도 대부분 천장에 붙은 평평한 흰 판에 머뭅니다. 투명 PC를 계단처럼 겹친 테두리로 엣지 조명 패널을 감싸, 45mm 두께 안에서 테두리가 겹친 유리처럼 빛나게 했습니다.",
       q: ["How can a ceiling light", "feel lighter than the ceiling?"],
       qkr: "천장보다 가벼워 보이는 천장등",
       dir: { label: "Design direction", t: "Layered Glass", kr: "겹겹이 쌓인 빛", img: "flos-07.webp" }
     },
     "clear-sconce": {
-      kr: "복도와 침대 옆 벽을 위한 벽등. 꺼져 있을 땐 작은 오브제, 켜지면 벽을 부드럽게 물들이는 빛. 알루미늄 밴드가 LED를 품고, 위아래로 휘어진 투명 아크릴이 빛을 두께 방향으로 끌고 가 가장자리에서 빛나게 한다.",
+      kr: "복도와 침대 옆 벽을 위한 벽등입니다. 꺼져 있을 땐 작은 오브제, 켜지면 벽을 부드럽게 물들이는 빛이 됩니다. 알루미늄 밴드가 LED를 품고, 위아래로 휘어진 투명 아크릴이 빛을 두께 방향으로 끌고 가 가장자리에서 빛나게 합니다.",
       q: ["Let the material", "carry the light."],
-      qkr: "빛은 재료가 옮긴다",
+      qkr: "빛은 재료가 옮깁니다",
       dir: { label: "Design direction", t: "Bent, not framed", kr: "프레임 대신 구부린 아크릴", img: "multi-02.webp" }
     },
     "multi-lighting": {
-      kr: "신축 아파트의 벽등, 파우더룸등, 계단등, 복도등 같은 보조 조명은 거의 바뀌지 않는다. 방마다 새 조명을 개발하면 압출·사출 금형을 매번 새로 만들어야 하고, 적은 물량으로는 비용 회수가 어렵기 때문. 그래서 압출 하나로 제품군 전체를 만드는 구조를 설계했다. 길이만 바꿔 자르고 날개, 엔드캡, 확산판을 조합하면 벽등도 펜던트도 된다.",
+      kr: "신축 아파트의 벽등, 파우더룸등, 계단등, 복도등 같은 보조 조명은 거의 바뀌지 않습니다. 방마다 새 조명을 개발하면 압출·사출 금형을 매번 새로 만들어야 하고, 적은 물량으로는 비용을 회수하기 어렵기 때문입니다. 그래서 압출 하나로 제품군 전체를 만드는 구조를 설계했습니다. 길이만 바꿔 자르고 날개, 엔드캡, 확산판을 조합하면 벽등도 펜던트도 됩니다.",
       q: ["One die.", "A whole family of light."],
       qkr: "금형 하나로, 조명 한 가족",
       dir: { label: "Design direction", t: "One profile, many rooms", kr: "하나의 단면, 여러 개의 방", img: "multi-05.webp" },
       real: {
         krk: "실물 크기 목업", chap: "Mockup & test",
         lead: "Printed, assembled and hung on a display stand at full size — to check proportion, glare and the up-and-down light split before tooling.",
-        rows: [["pair", [["real-multi-stand.webp", "On the stand", "벽등과 펜던트를 스탠드에 함께 설치"], ["real-multi-wall.webp", "Up & down", "압출 하나에서 나오는 위아래 빛"]]]]
+        rows: [["pair", [["real-multi-stand.webp", "On the stand", "벽등과 펜던트를 스탠드에 함께 걸었습니다"], ["real-multi-wall.webp", "Up & down", "압출 하나에서 나오는 위아래 빛"]]]]
       }
     },
     "industrial-pendant": {
       brief: "A free-topic lighting mockup for the product development team: a simple straight pendant that still brings an architectural accent into the dining space.",
       approach: "Light both ways, metal at the ends. A 55 × 70 mm body carries a 21 W main light down onto the table and an 11 W warm indirect light up to the ceiling. The industrial character lives in the hardware — satin-plated end caps with a horizontal hairline and an engraved wordmark, a matching flange and a 300 mm wire adjuster.",
-      kr: "팀 자유 주제 목업 프로젝트. 심플한 일자형 펜던트지만 공간에 건축적인 포인트가 되는 조명이 목표였다. 55×70mm 몸체 아래로 식탁을 비추는 주등 21W, 위로 천장을 감싸는 간접등 11W. 인더스트리얼한 인상은 하드웨어가 만든다. 가로 헤어라인 사틴 도금 엔드캡과 음각 워드마크, 같은 마감의 후렌지와 와이어 조절부.",
+      kr: "팀 자유 주제 목업 프로젝트입니다. 심플한 일자형 펜던트지만 공간에 건축적인 포인트가 되는 조명을 목표로 했습니다. 55×70mm 몸체 아래로 식탁을 비추는 주등 21W, 위로 천장을 감싸는 간접등 11W를 넣었습니다. 인더스트리얼한 인상은 하드웨어가 만듭니다. 가로 헤어라인 사틴 도금 엔드캡과 음각 워드마크, 같은 마감의 후렌지와 와이어 조절부입니다.",
       q: ["A straight line,", "lit both ways."],
       qkr: "위아래로 빛나는 하나의 선",
       dir: { label: "Design direction", t: "Architectural line", kr: "공간에 선을 긋는 펜던트", img: "ind-03.webp" },
@@ -320,18 +320,18 @@ window.DETAILS = {
       }
     },
     "linear-desk": {
-      kr: "긴 테이블을 위한 조명. 집의 책상이든 여럿이 앉는 바 테이블이든, 마주 앉은 사람 사이에 조명 머리를 세우지 않고 길이 전체를 고르게 비춰야 한다. 그래서 조명을 하나의 선으로 줄였다. 얇은 바가 부드러운 곡선 하나로 다리가 되어 바, 연결부, 다리가 한 획으로 읽힌다.",
+      kr: "긴 테이블을 위한 조명입니다. 집의 책상이든 여럿이 앉는 바 테이블이든, 마주 앉은 사람 사이에 조명 머리를 세우지 않고 길이 전체를 고르게 비춰야 합니다. 그래서 조명을 하나의 선으로 줄였습니다. 얇은 바가 부드러운 곡선 하나로 다리가 되어 바, 연결부, 다리가 한 획으로 읽힙니다.",
       q: ["Reduce the lamp", "to a single line."],
       qkr: "조명을 하나의 선으로",
       dir: { label: "Design direction", t: "One stroke", kr: "한 획으로 이어지는 바와 다리", img: "linear-09.webp" },
       real: {
-        krk: "직접 만들고, 직접 켠다", chap: "Hands on", studio: true,
+        krk: "직접 만들고, 직접 켭니다", chap: "Hands on", studio: true,
         lead: "No hand-off between drawing and object. Parts printed in the studio, aluminum cut, LEDs wired and the whole lamp assembled by hand — then judged with the light on.",
         rows: [["full", [
-          ["real-linear-bench.webp", "In the workshop", "설계한 사람이 직접 조립한다"],
-          ["real-linear-assemble.webp", "Hands on the part", "출력물의 맞춤을 손으로 확인"],
-          ["real-linear-wire.webp", "Wired by hand", "배선까지 직접"],
-          ["real-linear-check.webp", "Proportion check", "책상 위에서 높이와 비례 확인"],
+          ["real-linear-bench.webp", "In the workshop", "설계한 사람이 직접 조립합니다"],
+          ["real-linear-assemble.webp", "Hands on the part", "출력물이 맞는지 손으로 확인합니다"],
+          ["real-linear-wire.webp", "Wired by hand", "배선까지 직접 합니다"],
+          ["real-linear-check.webp", "Proportion check", "책상 위에서 높이와 비례를 봅니다"],
           ["real-linear-joint.webp", "Detail", "다리와 바가 만나는 곡선"],
           ["real-linear-corner2.webp", "Printed joint", "무광 화이트 출력 조인트"],
           ["real-linear-corner.webp", "One stroke", "바와 다리를 잇는 한 획"]

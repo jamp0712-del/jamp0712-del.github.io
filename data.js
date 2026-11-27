@@ -4,7 +4,7 @@ window.SITE = {
   name: "HOJUN YU",
   role: "Industrial Designer",
   statement: "One designer, the whole process — from the first sketch to engineered parts, 3D-printed mockups and the final image.",
-  statementKr: "스케치, 설계, 3D 프린팅 목업, 렌더링. 제품이 태어나는 모든 단계를 한 사람이 끝까지 쥐고 간다.",
+  statementKr: "스케치, 설계, 3D 프린팅 목업, 렌더링. 제품이 태어나는 모든 단계를 한 사람이 끝까지 쥐고 갑니다.",
   email: "jamp0712@naver.com",
   instagram: "",
   behance: "",

@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Project — Hojun Yu</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="project.css">
+<link rel="stylesheet" href="style.css?v=1127c">
+<link rel="stylesheet" href="project.css?v=1127c">
 </head>
 <body class="pp">
 <main id="app"></main>
-<script src="data.js"></script>
-<script src="details.js"></script>
-<script src="drawings.js"></script>
-<script src="vs.js"></script>
-<script src="kr.js"></script>
-<script src="common.js"></script>
+<script src="data.js?v=1127c"></script>
+<script src="details.js?v=1127c"></script>
+<script src="drawings.js?v=1127c"></script>
+<script src="vs.js?v=1127c"></script>
+<script src="kr.js?v=1127c"></script>
+<script src="common.js?v=1127c"></script>
 <script>
   const slug = new URLSearchParams(location.search).get("p");
   const idx = Math.max(0, PROJECTS.findIndex(p => p.slug === slug));
@@ -37,7 +37,8 @@
     return `<${tag} class="gx-name fit" aria-label="${esc(q.title)}">${w.length ? `<span class="l1">${esc(w.join(" "))}</span>` : ""}<span class="l2"><span class="chip"><img src="img/${q.chip || q.cover}" alt=""></span>${esc(last)}</span></${tag}>`;
   };
   const twoTone = t => { const w = t.split(" "), h = Math.ceil(w.length / 2); return `<b>${esc(w.slice(0, h).join(" "))}</b> ${esc(w.slice(h).join(" "))}`; };
-  const marquee = words => `<div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(words.map(w => { const [e, k] = [].concat(w); return `<span>${esc(e)}${k ? ` <small>${esc(k)}</small>` : ""}</span><i>✳</i>`; }).join("")).join("")}</div></div>`;
+  // 띠 그래픽: 영어만
+  const marquee = words => `<div class="gx-mq" aria-hidden="true"><div>${Array(2).fill(words.map(t => `<span>${esc(t)}</span><i>✳</i>`).join("")).join("")}</div></div>`;
 
   let ch = 0; const toc = [];
   const chap = (title, sub, inner, cls = "", kOver) => {
